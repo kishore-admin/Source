@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "58239290286",
+    "firebase_url": "https://ecom-project-cef50-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "ecom-project-cef50",
+    "storage_bucket": "ecom-project-cef50.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:58239290286:android:866d0d86dbc942d6c2163f",
+        "android_client_info": {
+          "package_name": "com.nativeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "58239290286-brh6abuv8cc0pn37ae9d38pjb4kls21l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNtYe-jOgOgzp2sKJ4v7YYy36lhrp1tRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "58239290286-brh6abuv8cc0pn37ae9d38pjb4kls21l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
