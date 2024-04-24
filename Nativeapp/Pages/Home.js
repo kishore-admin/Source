@@ -6,11 +6,17 @@ import {
   View,
   StyleSheet,
   FlatList,
-  Alert,
+  Dimensions,
+  ScrollView,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import BottomStrip from '../Components/BottomStrip';
+import {SafeAreaView} from 'react-native';
 import Product from './Product.json';
 import {useState} from 'react';
-const Home = () => {
+import Carousel from 'react-native-reanimated-carousel';
+
+const Home = ({navigation}) => {
   const [filterData, setFilteredData] = useState('');
   const [Data, setData] = useState(Product);
   function fnlFilter() {
@@ -24,27 +30,93 @@ const Home = () => {
     // alert(filteredData);
     setData(filteredData);
   }
+  function fnlcart(item) {
+    console.log(item);
+  }
+  const width = Dimensions.get('window').width;
+  // const height = Dimensions.get('window').height;
   return (
-    <View style={{flex: 1}}>
-      <View style={{flex: 1}}>
-        <TouchableOpacity style={{backgroundColor: 'green', height: 50}}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text>Toolbar</Text>
-            <Text>Profile</Text>
-          </View>
-        </TouchableOpacity>
-        <TextInput
-          style={{borderWidth: 1, borderStyle: 'solid'}}
-          onChange={newText => setFilteredData(newText)}
-        ></TextInput>
-        <TouchableOpacity
-          onPress={fnlFilter}
-          //   style={{backgroundColor: 'yellow'}}
+    <ScrollView>
+      <BottomStrip />
+      <SafeAreaView style={{padding: 10}}>
+        <View
+          style={{
+            marginBottom: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 15,
+          }}
         >
-          <Text>Click me</Text>
-        </TouchableOpacity>
+          <Image
+            style={{height: 40, width: 30}}
+            source={{
+              uri:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2VXmgKBoAvy1AqjLWAIQ8xYn9pNZWsGkDGYZq2ufDlQ&s',
+            }}
+          ></Image>
+          <Text>A free marketing app for manufactures</Text>
+        </View>
+        <Text style={styles.subHeading}>Category</Text>
         <FlatList
-          // style
+          style={{height: 85}}
+          horizontal={true}
+          data={Data}
+          renderItem={({item}) => (
+            <View
+              style={{
+                flex: 1,
+                padding: 8,
+                height: 100,
+              }}
+            >
+              <Image
+                style={styles.horizontalThumb}
+                source={{uri: item.image}}
+              />
+              <Text style={styles.horizontalName}>{item.category}</Text>
+            </View>
+          )}
+        />
+        <View
+          style={{
+            paddingVertical: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <TextInput
+            style={styles.inputText}
+            onChange={newText => setFilteredData(newText)}
+            placeholder="Search"
+          ></TextInput>
+          <Icon
+            name="cash-outline"
+            size={30}
+            color="green"
+            onPress={() => navigation.navigate('Product')}
+          />
+          <TouchableOpacity onPress={fnlFilter}></TouchableOpacity>
+        </View>
+        <Text style={styles.subHeading}>Special offers</Text>
+        <Carousel
+          style={{alignItems: 'center'}}
+          loop
+          pagingEnabled={false}
+          snapEnabled={false}
+          width={width}
+          height={80}
+          autoPlay={true}
+          data={Data}
+          scrollAnimationDuration={4000}
+          renderItem={({item}) => (
+            <View>
+              <Image style={styles.carouselImg} source={{uri: item.image}} />
+            </View>
+          )}
+        />
+        <Text style={styles.subHeading}>Products</Text>
+        <FlatList
+          style={{height: '100%', marginTop: 10}}
           numColumns={2}
           data={Data}
           renderItem={({item}) => (
@@ -56,6 +128,7 @@ const Home = () => {
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
+                    paddingTop: 5,
                   }}
                 >
                   <Text style={styles.price}>$ {item.price}</Text>
@@ -64,8 +137,9 @@ const Home = () => {
                       backgroundColor: 'green',
                       borderRadius: 3,
                       paddingVertical: 2,
-                      paddingHorizontal: 5,
+                      paddingHorizontal: 15,
                     }}
+                    onPress={fnlcart}
                   >
                     <Text style={{fontSize: 12, color: '#fff'}}>ADD</Text>
                   </TouchableOpacity>
@@ -73,16 +147,17 @@ const Home = () => {
               </View>
             </TouchableOpacity>
           )}
-          //   keyExtractor={item => item.id}
         />
-      </View>
-    </View>
+      </SafeAreaView>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
   card: {
-    margin: 5,
-    width: '50%',
+    marginHorizontal: 6,
+    marginBottom: 10,
+    flexDirection: 'column',
+    width: '46%',
     backgroundColor: 'white',
     borderRadius: 16,
     shadowOpacity: 0.2,
@@ -93,25 +168,56 @@ const styles = StyleSheet.create({
       width: 0,
     },
     elevation: 1,
-    marginVertical: 20,
   },
   thumb: {
+    marginVertical: 12,
     objectFit: 'contain',
-    height: 160,
+    height: 120,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     width: '100%',
   },
+  carouselImg: {
+    objectFit: 'contain',
+    height: 70,
+  },
+  horizontalThumb: {
+    objectFit: 'contain',
+    height: 40,
+  },
   infoContainer: {
-    padding: 16,
+    paddingHorizontal: 8,
+    paddingBottom: 15,
   },
   name: {
-    fontSize: 14,
+    fontSize: 13,
+    // fontFamily: 'Helvetica',
+    fontWeight: '400',
+    color: '#000',
+  },
+  horizontalName: {
+    color: '#000',
+    fontSize: 10,
     fontWeight: 'bold',
+    width: 40,
   },
   price: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  inputText: {
+    width: '85%',
+    borderStyle: 'solid',
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 3,
+    padding: 4,
+  },
+  subHeading: {
+    color: 'black',
+    fontWeight: '500',
+    fontSize: 20,
+    fontFamily: '',
   },
 });
 export default Home;
