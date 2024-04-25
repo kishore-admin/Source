@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import BottomStrip from '../Components/BottomStrip';
+import MktDetails from './MarketingDetails';
 import {SafeAreaView} from 'react-native';
 import Product from './Product.json';
 import {useState} from 'react';
@@ -37,117 +38,127 @@ const Home = ({navigation}) => {
   // const height = Dimensions.get('window').height;
   return (
     <ScrollView>
-      <BottomStrip />
       <SafeAreaView style={{padding: 10}}>
-        <View
-          style={{
-            marginBottom: 10,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 15,
-          }}
-        >
-          <Image
-            style={{height: 40, width: 30}}
-            source={{
-              uri:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2VXmgKBoAvy1AqjLWAIQ8xYn9pNZWsGkDGYZq2ufDlQ&s',
+        <View style={{flex: 1, position: 'relative'}}>
+          <View
+            style={{
+              marginBottom: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 15,
             }}
-          ></Image>
-          <Text>A free marketing app for manufactures</Text>
-        </View>
-        <Text style={styles.subHeading}>Category</Text>
-        <FlatList
-          style={{height: 85}}
-          horizontal={true}
-          data={Data}
-          renderItem={({item}) => (
-            <View
-              style={{
-                flex: 1,
-                padding: 8,
-                height: 100,
+          >
+            <Image
+              style={{height: 40, width: 30}}
+              source={{
+                uri:
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2VXmgKBoAvy1AqjLWAIQ8xYn9pNZWsGkDGYZq2ufDlQ&s',
               }}
-            >
-              <Image
-                style={styles.horizontalThumb}
-                source={{uri: item.image}}
-              />
-              <Text style={styles.horizontalName}>{item.category}</Text>
-            </View>
-          )}
-        />
-        <View
-          style={{
-            paddingVertical: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <TextInput
-            style={styles.inputText}
-            onChange={newText => setFilteredData(newText)}
-            placeholder="Search"
-          ></TextInput>
-          <Icon
-            name="cash-outline"
-            size={30}
-            color="green"
-            onPress={() => navigation.navigate('Product')}
-          />
-          <TouchableOpacity onPress={fnlFilter}></TouchableOpacity>
-        </View>
-        <Text style={styles.subHeading}>Special offers</Text>
-        <Carousel
-          style={{alignItems: 'center'}}
-          loop
-          pagingEnabled={false}
-          snapEnabled={false}
-          width={width}
-          height={80}
-          autoPlay={true}
-          data={Data}
-          scrollAnimationDuration={4000}
-          renderItem={({item}) => (
-            <View>
-              <Image style={styles.carouselImg} source={{uri: item.image}} />
-            </View>
-          )}
-        />
-        <Text style={styles.subHeading}>Products</Text>
-        <FlatList
-          style={{height: '100%', marginTop: 10}}
-          numColumns={2}
-          data={Data}
-          renderItem={({item}) => (
-            <TouchableOpacity style={styles.card}>
-              <Image style={styles.thumb} source={{uri: item.image}} />
-              <View style={styles.infoContainer}>
-                <Text style={styles.name}>{item.title}</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    paddingTop: 5,
-                  }}
-                >
-                  <Text style={styles.price}>$ {item.price}</Text>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: 'green',
-                      borderRadius: 3,
-                      paddingVertical: 2,
-                      paddingHorizontal: 15,
-                    }}
-                    onPress={fnlcart}
-                  >
-                    <Text style={{fontSize: 12, color: '#fff'}}>ADD</Text>
-                  </TouchableOpacity>
-                </View>
+            ></Image>
+            <Text>A free marketing app for manufactures</Text>
+          </View>
+          <Text style={styles.subHeading}>Category</Text>
+          <FlatList
+            style={{height: 85}}
+            horizontal={true}
+            data={Data}
+            renderItem={({item}) => (
+              <View
+                style={{
+                  flex: 1,
+                  padding: 8,
+                  height: 100,
+                }}
+              >
+                <Image
+                  style={styles.horizontalThumb}
+                  source={{uri: item.image}}
+                />
+                <Text style={styles.horizontalName}>{item.category}</Text>
               </View>
-            </TouchableOpacity>
-          )}
-        />
+            )}
+          />
+          <View
+            style={{
+              paddingVertical: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <TextInput
+              style={styles.inputText}
+              onChange={newText => setFilteredData(newText)}
+              placeholder="Search"
+            ></TextInput>
+            <Icon
+              name="cash-outline"
+              size={30}
+              color="green"
+              onPress={() => navigation.navigate('BottomStrip')}
+            />
+            <TouchableOpacity onPress={fnlFilter}></TouchableOpacity>
+          </View>
+          <Text style={styles.subHeading}>Special offers</Text>
+          <Carousel
+            style={{alignItems: 'center'}}
+            loop
+            pagingEnabled={false}
+            snapEnabled={false}
+            width={width}
+            height={80}
+            autoPlay={true}
+            data={Data}
+            scrollAnimationDuration={4000}
+            renderItem={({item}) => (
+              <View>
+                <Image style={styles.carouselImg} source={{uri: item.image}} />
+              </View>
+            )}
+          />
+          <Text style={styles.subHeading}>Products</Text>
+          <FlatList
+            style={{height: '100%', marginTop: 10}}
+            numColumns={2}
+            data={Data}
+            renderItem={({item}) => (
+              <TouchableOpacity style={styles.card}>
+                <Image style={styles.thumb} source={{uri: item.image}} />
+                <View style={styles.infoContainer}>
+                  <Text style={styles.name}>{item.title}</Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      paddingTop: 5,
+                    }}
+                  >
+                    <Text style={styles.price}>$ {item.price}</Text>
+                    <TouchableOpacity
+                      style={{
+                        backgroundColor: 'green',
+                        borderRadius: 3,
+                        paddingVertical: 2,
+                        paddingHorizontal: 15,
+                      }}
+                      onPress={fnlcart}
+                    >
+                      <Text style={{fontSize: 12, color: '#fff'}}>ADD</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+          <BottomStrip
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              zIndex: 2,
+            }}
+          />
+        </View>
       </SafeAreaView>
     </ScrollView>
   );
@@ -191,7 +202,6 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 13,
-    // fontFamily: 'Helvetica',
     fontWeight: '400',
     color: '#000',
   },
@@ -215,9 +225,10 @@ const styles = StyleSheet.create({
   },
   subHeading: {
     color: 'black',
-    fontWeight: '500',
-    fontSize: 20,
-    fontFamily: '',
+    fontWeight: '800',
+    fontSize: 17,
+    marginLeft: 5,
+    marginBottom: 5,
   },
 });
 export default Home;

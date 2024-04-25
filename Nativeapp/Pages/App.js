@@ -6,7 +6,9 @@ import BottomStrip from '../Components/BottomStrip';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Splash from './Splash';
+import MktDetails from './MarketingDetails';
 import {useState} from 'react';
+import UserAccount from './UserAccount';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -25,7 +27,9 @@ const App = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Product" component={Getproduct} />
-        <Stack.Screen name="BottomStrip" component={BottomStrip} />
+        {/* <Stack.Screen name="BottomStrip" component={BottomStrip} /> */}
+        <Stack.Screen name="MktDetails" component={MktDetails} />
+        <Stack.Screen name="UserAccount" component={UserAccount} />
       </Stack.Navigator>
     </NavigationContainer>
   );

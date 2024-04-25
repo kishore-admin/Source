@@ -1,18 +1,13 @@
 import {TouchableOpacity, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-// import Getproduct from '../Pages/GetProduct';
 const BottomStrip = ({navigation}) => {
   return (
     <View
       style={{
         flex: 1,
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
+
         backgroundColor: 'gray',
         flexDirection: 'row',
-        // height: 55,
         alignItems: 'center',
       }}
     >
