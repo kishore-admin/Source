@@ -90,12 +90,11 @@ const Home = ({navigation}) => {
               onChange={newText => setFilteredData(newText)}
               placeholder="Search"
             ></TextInput>
-            <Icon
+            {/* <Icon
               name="cash-outline"
               size={30}
               color="green"
-              onPress={() => navigation.navigate('BottomStrip')}
-            />
+            /> */}
             <TouchableOpacity onPress={fnlFilter}></TouchableOpacity>
           </View>
           <Text style={styles.subHeading}>Special offers</Text>
@@ -148,15 +147,6 @@ const Home = ({navigation}) => {
                 </View>
               </TouchableOpacity>
             )}
-          />
-          <BottomStrip
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              zIndex: 2,
-            }}
           />
         </View>
       </SafeAreaView>

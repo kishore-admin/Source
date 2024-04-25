@@ -9,7 +9,7 @@ import Splash from './Splash';
 import MktDetails from './MarketingDetails';
 import {useState} from 'react';
 import UserAccount from './UserAccount';
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [splash, setSplash] = useState(true);
@@ -20,17 +20,16 @@ const App = () => {
     <Splash></Splash>
   ) : (
     <NavigationContainer>
-      <Stack.Navigator
+      {/* <Stack.Navigator
         initialRouteName="Home"
         screenOptions={{headerShown: false}}
       >
-        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Product" component={Getproduct} />
-        {/* <Stack.Screen name="BottomStrip" component={BottomStrip} /> */}
         <Stack.Screen name="MktDetails" component={MktDetails} />
         <Stack.Screen name="UserAccount" component={UserAccount} />
-      </Stack.Navigator>
+      </Stack.Navigator> */}
+      <BottomStrip />
     </NavigationContainer>
   );
 };

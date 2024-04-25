@@ -16,7 +16,7 @@ const UserAccount = () => {
       <Text style={styles.subHeading}>Personal Details</Text>
       <View
         style={{
-          flex: 0.7,
+          flex: 0.8,
           borderRadius: 5,
           backgroundColor: '#ffffff',
         }}
