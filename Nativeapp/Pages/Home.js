@@ -10,8 +10,6 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import BottomStrip from '../Components/BottomStrip';
-import MktDetails from './MarketingDetails';
 import {SafeAreaView} from 'react-native';
 import Product from './Product.json';
 import {useState} from 'react';
@@ -39,7 +37,7 @@ const Home = ({navigation}) => {
   return (
     <ScrollView>
       <SafeAreaView style={{padding: 10}}>
-        <View style={{flex: 1, position: 'relative'}}>
+        <View>
           <View
             style={{
               marginBottom: 10,
@@ -56,6 +54,26 @@ const Home = ({navigation}) => {
               }}
             ></Image>
             <Text>A free marketing app for manufactures</Text>
+          </View>
+          <View
+            style={{
+              paddingVertical: 5,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <TextInput
+              style={styles.inputText}
+              onChange={newText => setFilteredData(newText)}
+              placeholder="Search"
+            ></TextInput>
+            <Icon
+              name="cash-outline"
+              size={30}
+              color="green"
+              // onPress={() => navigation.navigate('IntroSlider')}
+            />
+            <TouchableOpacity onPress={fnlFilter}></TouchableOpacity>
           </View>
           <Text style={styles.subHeading}>Category</Text>
           <FlatList
@@ -78,25 +96,6 @@ const Home = ({navigation}) => {
               </View>
             )}
           />
-          <View
-            style={{
-              paddingVertical: 10,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
-            <TextInput
-              style={styles.inputText}
-              onChange={newText => setFilteredData(newText)}
-              placeholder="Search"
-            ></TextInput>
-            {/* <Icon
-              name="cash-outline"
-              size={30}
-              color="green"
-            /> */}
-            <TouchableOpacity onPress={fnlFilter}></TouchableOpacity>
-          </View>
           <Text style={styles.subHeading}>Special offers</Text>
           <Carousel
             style={{alignItems: 'center'}}
@@ -210,8 +209,9 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: 'gray',
     borderWidth: 1,
-    borderRadius: 3,
-    padding: 4,
+    borderRadius: 25,
+    paddingHorizontal: 18,
+    paddingVertical: 8,
   },
   subHeading: {
     color: 'black',

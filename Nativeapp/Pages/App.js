@@ -1,35 +1,37 @@
-import {Text, View} from 'react-native';
-import Login from './Login';
-import Home from './Home';
-import Getproduct from './GetProduct';
+import {useState} from 'react';
+import {Alert, Text, View} from 'react-native';
 import BottomStrip from '../Components/BottomStrip';
+import Splash from './Splash';
+import IntroSlider from './IntroSlider';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Splash from './Splash';
-import MktDetails from './MarketingDetails';
-import {useState} from 'react';
-import UserAccount from './UserAccount';
-// const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [splash, setSplash] = useState(true);
+  const [intro, setIntro] = useState(false);
   setTimeout(() => {
-    setSplash(false);
+    setIntro(true);
   }, 2000);
+  function onStateChange() {
+    setSplash(false);
+    setIntro(false);
+  }
   return splash ? (
-    <Splash></Splash>
+    intro ? (
+      <IntroSlider onIntroDone={onStateChange} />
+    ) : (
+      <Splash></Splash>
+    )
   ) : (
     <NavigationContainer>
-      {/* <Stack.Navigator
-        initialRouteName="Home"
+      <Stack.Navigator
+        initialRouteName="BottomStrip"
         screenOptions={{headerShown: false}}
       >
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Product" component={Getproduct} />
-        <Stack.Screen name="MktDetails" component={MktDetails} />
-        <Stack.Screen name="UserAccount" component={UserAccount} />
-      </Stack.Navigator> */}
-      <BottomStrip />
+        <Stack.Screen name="BottomStrip" component={BottomStrip} />
+        <Stack.Screen name="IntroSlider" component={IntroSlider} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

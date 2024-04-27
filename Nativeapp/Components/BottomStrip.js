@@ -94,7 +94,7 @@ const BottomStrip = () => {
         }}
       />
       <Tab.Screen
-        name="Product"
+        name="GetProduct"
         component={Getproduct}
         options={{
           tabBarIcon: ({focused}) => (

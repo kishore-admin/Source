@@ -5,8 +5,35 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
+import AppIntroSlider from 'react-native-app-intro-slider';
+const slides = [
+  {
+    key: 1,
+    // title: 'Title 1',
+    title: 'Enter your products details to list in Markopolo',
+    image: require('./image/ecom-store.png'),
+    backgroundColor: '#2775f2',
+  },
+  {
+    key: 2,
+    // title: 'Title 2',
+    title:
+      'Markopolo assigns you a dedicated marketing person for your product',
+    image: require('./image/ecom-marketing.png'),
+    backgroundColor: '#febe29',
+  },
+  {
+    key: 3,
+    // title: 'Rocket guy',
+    title:
+      'Markopolo promotes your product and get bulk orders on free of cost',
+    image: require('./image/ecom-delivary.png'),
+    backgroundColor: '#22bcb5',
+  },
+];
 
 const Getproduct = () => {
   const [company, setCompany] = useState('');
@@ -16,12 +43,40 @@ const Getproduct = () => {
   const [price, setPrice] = useState('');
   const [readiness, setReadness] = useState('');
   const [alliedPdt, setAlliedpdt] = useState('');
+  const [showRealApp, setShowRealApp] = useState(false);
   let item = [
     {label: 'Item1', value: 'Item1'},
     {label: 'Item2', value: 'Item2'},
     {label: 'Item3', value: 'Item3'},
   ];
-  return (
+  const renderItem = ({item}) => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginVertical: 30,
+        }}
+      >
+        <Image
+          source={item.image}
+          style={{objectFit: 'contain', height: 320}}
+        />
+        <Text style={{fontSize: 20, fontWeight: 'bold', margin: 20}}>
+          {item.title}
+        </Text>
+        {/* <Text style={{fontSize: 17}}>{item.text}</Text> */}
+      </View>
+    );
+  };
+  return showRealApp ? (
+    <AppIntroSlider
+      renderItem={renderItem}
+      data={slides}
+      onDone={() => setShowRealApp(false)}
+    />
+  ) : (
     <View style={{flex: 1, justifyContent: 'center'}}>
       <Text style={{fontSize: 20, alignSelf: 'center'}}>
         Fill the details below
@@ -32,7 +87,6 @@ const Getproduct = () => {
           <TextInput
             style={styles.inputbox}
             onChange={value => setCompany(value)}
-            // placeholder=""
           ></TextInput>
         </View>
 
@@ -42,7 +96,6 @@ const Getproduct = () => {
             style={styles.inputbox}
             inputMode="numeric"
             onChange={newText => setContact(newText)}
-            // placeholder="Contact"
           ></TextInput>
         </View>
         <View style={{padding: 8}}>
@@ -51,10 +104,8 @@ const Getproduct = () => {
             style={styles.inputbox}
             labelField="label"
             valueField="value"
-            // style={{paddingHorizontal: 10}}
             search={true}
             data={item}
-            // placeholder="Catagory"
             placeholderStyle={{fontSize: 15, color: 'black'}}
             value={category}
             onChange={data => {
@@ -67,9 +118,7 @@ const Getproduct = () => {
           <TextInput
             style={styles.inputbox}
             inputMode="numeric"
-            // style={{padding: 10}}
             onChange={newText => setQuantity(newText)}
-            // placeholder="Quantity"
           ></TextInput>
         </View>
         <View style={{padding: 8}}>
@@ -77,9 +126,7 @@ const Getproduct = () => {
           <TextInput
             style={styles.inputbox}
             inputMode="numeric"
-            // style={{padding: 10}}
             onChange={newText => setPrice(newText)}
-            // placeholder="Price"
           ></TextInput>
         </View>
         <View style={{padding: 8}}>
@@ -87,9 +134,7 @@ const Getproduct = () => {
           <TextInput
             style={styles.inputbox}
             inputMode="numeric"
-            // style={{padding: 10}}
             onChange={newText => setReadness(newText)}
-            // placeholder="Readness time"
           ></TextInput>
         </View>
         <View style={{padding: 8}}>
@@ -97,7 +142,6 @@ const Getproduct = () => {
           <TextInput
             style={styles.inputbox}
             onChange={value => setAlliedpdt(value)}
-            // placeholder="Allied Product"
           ></TextInput>
         </View>
       </View>
