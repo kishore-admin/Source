@@ -12,7 +12,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Dropdown} from 'react-native-element-dropdown';
 import AppIntroSlider from 'react-native-app-intro-slider';
-import {ref, set, Database, getDatabase, get} from 'firebase/database';
+import {ref, set, getDatabase, get, child} from 'firebase/database';
 import {initializeApp} from 'firebase/app';
 import uuid from 'react-native-uuid';
 
@@ -88,10 +88,22 @@ const Getproduct = () => {
       alliedPdt: alliedPdt,
     });
     const userid = await AsyncStorage.getItem('userId');
-    console.log(userid);
-    let collection = get(ref(db, 'users/' + userid + '/productCollection'));
-    console.log(collection);
-    set(ref(db, 'users/' + userid + '/productCollection')[1], [uniqueId]);
+    const dbRef = ref(getDatabase(app));
+    get(child(dbRef, `users/${userid}/userProduct`))
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          let array = snapshot.val();
+          array.push(uniqueId);
+          set(ref(db, 'users/' + userid + '/userProduct'), array);
+        } else {
+          console.log('No data available');
+          set(ref(db, 'users/' + userid + '/userProduct'), [uniqueId]);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
     setCompany('');
     setContact('');
     setCategory('');
