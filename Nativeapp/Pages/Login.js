@@ -9,20 +9,27 @@ import {
   Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ref, set, getDatabase} from 'firebase/database';
-// import {GoogleSignin} from '@react-native-google-signin/google-signin';
-// import auth from '@react-native-firebase/auth';
-// "@react-native-google-signin/google-signin": "^11.0.1",
-// "@react-native-firebase/auth": "^19.2.2",
+import {ref, set, Database, getDatabase} from 'firebase/database';
+import {initializeApp} from 'firebase/app';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [initializing, setInitializing] = useState(true);
-  // const [user, setUser] = useState();
-  // GoogleSignin.configure({
-  //   webClientId: '',
-  // });
+  //Firebase config
+  const firebaseConfig = {
+    apiKey: 'AIzaSyDwX7JlIfWadfIqSNxzZsbSk3lXmld0BKI',
+    authDomain: 'ecom-project-cef50.firebaseapp.com',
+    databaseURL:
+      'https://ecom-project-cef50-default-rtdb.asia-southeast1.firebasedatabase.app',
+    projectId: 'ecom-project-cef50',
+    storageBucket: 'ecom-project-cef50.appspot.com',
+    messagingSenderId: '58239290286',
+    appId: '1:58239290286:web:630328351dc0482cc2163f',
+    measurementId: 'G-84P32S9TGG',
+  };
+  let app;
   useEffect(() => {
+    // Initialize Firebase
+    app = initializeApp(firebaseConfig);
     async function login() {
       let value = await AsyncStorage.getItem('email');
       if (value !== undefined) {
@@ -41,8 +48,6 @@ const Login = () => {
       }
     }
     login;
-    // const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    // return subscriber; // unsubscribe on unmount
   });
   async function fnLogin() {
     let data = {email: email, password: password, returnSecureToken: true};
@@ -57,19 +62,20 @@ const Login = () => {
       },
     )
       .then(response => response.text())
-      .then(result => {
-        console.log(JSON.parse(result));
-        // const db = getDatabase();
-        // set(ref(db, 'users/' + JSON.parse(result).localId), {
-        //   email: email,
-      })
-      .then(() => {
-        async function session() {
-          await AsyncStorage.setItem('email', email);
-          await AsyncStorage.setItem('password', password);
-        }
-        session;
-        Alert.alert('Done');
+      .then(async result => {
+        console.log(result);
+        // console.log(JSON.parse(result).error.code);
+        // if (JSON.parse(result).error.code == 400) {
+        //   Alert.alert('invalid credentials');
+        // } else {
+        let id = JSON.parse(result).localId;
+        await AsyncStorage.setItem('userId', id);
+        await AsyncStorage.setItem('email', email);
+        const db = getDatabase(app);
+        set(ref(db, 'users/' + id), {
+          email: email,
+        });
+        // }
       })
       .catch(error => {
         console.log(error);
@@ -139,9 +145,9 @@ const Login = () => {
         <TouchableOpacity style={styles.button} onPress={fnLogin}>
           <Text style={{padding: 10, textAlign: 'center'}}>Sign in</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={onGoogleButtonPress}>
+        {/* <TouchableOpacity style={styles.button} onPress={onGoogleButtonPress}>
           <Text style={{padding: 10, textAlign: 'center'}}>Google Sign in</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View style={{flexDirection: 'row', marginVertical: 10}}>
           <Text>If you are new here,</Text>
           <Text style={{color: 'blue'}}> Sign up</Text>

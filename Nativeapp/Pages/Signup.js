@@ -25,18 +25,23 @@ const SignUp = () => {
           },
           body: JSON.stringify(data), // body data type must match "Content-Type" header
         },
-      ).then(response => {
-        let data = JSON.stringify(response);
-        // Alert.alert(data); // JSON data parsed by `data.json()` cal)l
-        if (response.status == '200') {
-          Alert.alert('Account created sucessfully');
-        } else if (response.status == '400') {
-          if (response.message === 'EMAIL_EXISTS')
-            Alert.alert('Email Already exsists');
-        } else {
-          Alert.alert('Account creation failed');
-        }
-      });
+      )
+        .then(response => {
+          let data = JSON.stringify(response);
+          console.log(data);
+          // Alert.alert(data); // JSON data parsed by `data.json()` cal)l
+          if (response.status == '200') {
+            Alert.alert('Account created sucessfully');
+          } else if (response.status == '400') {
+            //   if (data.message === 'EMAIL_EXISTS')
+            //     Alert.alert('Email Already exsists');
+            // } else {
+            Alert.alert('Account creation failed');
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     } else {
       Alert.alert('Password Mismatch');
     }

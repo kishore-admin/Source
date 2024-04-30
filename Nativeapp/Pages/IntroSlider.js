@@ -27,7 +27,7 @@ const slides = [
   },
 ];
 
-const IntroSlider = ({onIntroDone}) => {
+const IntroSlider = ({navigation}) => {
   function onDone() {
     onIntroDone();
   }
@@ -53,7 +53,11 @@ const IntroSlider = ({onIntroDone}) => {
     );
   };
   return (
-    <AppIntroSlider renderItem={renderItem} data={slides} onDone={onDone} />
+    <AppIntroSlider
+      renderItem={renderItem}
+      data={slides}
+      onDone={() => navigation.navigate('BottomStrip')}
+    />
   );
 };
 export default IntroSlider;
