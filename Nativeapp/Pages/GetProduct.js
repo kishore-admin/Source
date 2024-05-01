@@ -15,6 +15,7 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import {ref, set, getDatabase, get, child} from 'firebase/database';
 import {initializeApp} from 'firebase/app';
 import uuid from 'react-native-uuid';
+// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const slides = [
   {
@@ -42,10 +43,12 @@ const slides = [
   },
 ];
 
-const Getproduct = () => {
+const Getproduct = ({navigation}) => {
   const [company, setCompany] = useState('');
   const [contact, setContact] = useState('');
   const [category, setCategory] = useState('');
+  const [productName, setProductName] = useState('');
+  const [description, setDescription] = useState('');
   const [wholesaleQty, setWholesaleQty] = useState('');
   const [wholesalePrice, setWholesalePrice] = useState('');
   const [wholesaleReadiness, setWholesaleReadiness] = useState('');
@@ -68,7 +71,16 @@ const Getproduct = () => {
   };
   let app;
   useEffect(() => {
-    app = initializeApp(firebaseConfig);
+    async function Usercheck() {
+      let userId = await AsyncStorage.getItem('userId');
+      if (userId !== undefined && userId !== null) {
+        app = initializeApp(firebaseConfig);
+      } else {
+        console.log('no user id found');
+        navigation.navigate('Login');
+      }
+    }
+    Usercheck();
   });
   async function handleAddItem() {
     let uniqueId = uuid.v4();
@@ -79,6 +91,8 @@ const Getproduct = () => {
       company: company,
       contact: contact,
       category: category,
+      name: productName,
+      description: description,
       wholesaleQty: wholesaleQty,
       wholesalePrice: wholesalePrice,
       wholesaleReadiness: wholesaleReadiness,
@@ -89,6 +103,7 @@ const Getproduct = () => {
     });
     const userid = await AsyncStorage.getItem('userId');
     const dbRef = ref(getDatabase(app));
+    console.log(userid);
     get(child(dbRef, `users/${userid}/userProduct`))
       .then(snapshot => {
         if (snapshot.exists()) {
@@ -107,6 +122,8 @@ const Getproduct = () => {
     setCompany('');
     setContact('');
     setCategory('');
+    setProductName('');
+    setDescription('');
     setWholesaleQty('');
     setWholesalePrice('');
     setWholesaleReadiness('');
@@ -141,6 +158,24 @@ const Getproduct = () => {
       </View>
     );
   };
+  // function test() {
+  //   const options = {
+  //     mediaType: 'photo',
+  //     includeBase64: true,
+  //     maxHeight: 2000,
+  //     maxWidth: 2000,
+  //   };
+  //   launchImageLibrary(options, response => {
+  //     if (response.didCancel) {
+  //       console.log('User cancelled image picker');
+  //     } else if (response.error) {
+  //       console.log('Image picker error: ', response.error);
+  //     } else {
+  //       // let imageUri = response.uri || response.assets?.[0]?.uri;
+  //       // setSelectedImage(imageUri);
+  //     }
+  //   });
+  // }
   return showRealApp ? (
     <AppIntroSlider
       renderItem={renderItem}
@@ -153,6 +188,20 @@ const Getproduct = () => {
         <Text style={{fontSize: 20, alignSelf: 'center'}}>
           Fill the details below
         </Text>
+        {/* <View style={{paddingHorizontal: 20}}>
+          <TouchableOpacity
+            style={{
+              alignItems: 'center',
+              height: 40,
+              backgroundColor: 'gray',
+              justifyContent: 'center',
+              borderRadius: 3,
+            }}
+            onPress={test}
+          >
+            <Text style={{alignItems: 'center'}}>Add to Markpolo</Text>
+          </TouchableOpacity>
+        </View> */}
         <View style={styles.Getproduct}>
           <View style={{padding: 8}}>
             <Text>Company Name</Text>
@@ -162,7 +211,6 @@ const Getproduct = () => {
               onChangeText={newText => setCompany(newText)}
             ></TextInput>
           </View>
-
           <View style={{padding: 8}}>
             <Text>Contact</Text>
             <TextInput
@@ -186,6 +234,23 @@ const Getproduct = () => {
                 setCategory(data.value);
               }}
             ></Dropdown>
+          </View>
+          <View style={{padding: 8}}>
+            <Text>Product Name</Text>
+            <TextInput
+              style={styles.inputbox}
+              value={productName}
+              onChangeText={newText => setProductName(newText)}
+            ></TextInput>
+          </View>
+          <View style={{padding: 8}}>
+            <Text>Product Description</Text>
+            <TextInput
+              style={styles.inputbox}
+              value={description}
+              multiline={true}
+              onChangeText={newText => setDescription(newText)}
+            ></TextInput>
           </View>
           <View style={{padding: 8}}>
             <Text>Wholesale Quantity</Text>

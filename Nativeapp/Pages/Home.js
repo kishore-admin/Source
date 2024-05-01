@@ -8,16 +8,63 @@ import {
   FlatList,
   Dimensions,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
+import {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Product from './Product.json';
-import {useState} from 'react';
 import Carousel from 'react-native-reanimated-carousel';
+import {ref, set, getDatabase, get, child} from 'firebase/database';
+import {initializeApp} from 'firebase/app';
 
 const Home = ({navigation}) => {
+  let products;
   const [filterData, setFilteredData] = useState('');
   const [Data, setData] = useState(Product);
+  const [productList, setProductList] = useState('');
+  const [refresh, setRefresh] = useState(false);
+  const firebaseConfig = {
+    apiKey: 'AIzaSyDwX7JlIfWadfIqSNxzZsbSk3lXmld0BKI',
+    authDomain: 'ecom-project-cef50.firebaseapp.com',
+    databaseURL:
+      'https://ecom-project-cef50-default-rtdb.asia-southeast1.firebasedatabase.app',
+    projectId: 'ecom-project-cef50',
+    storageBucket: 'ecom-project-cef50.appspot.com',
+    messagingSenderId: '58239290286',
+    appId: '1:58239290286:web:630328351dc0482cc2163f',
+    measurementId: 'G-84P32S9TGG',
+  };
+  let app;
+
+  useEffect(() => {
+    async function UserId() {
+      let userId = await AsyncStorage.getItem('userId');
+      if (userId !== undefined && userId !== null) {
+        app = initializeApp(firebaseConfig);
+        const dbRef = ref(getDatabase(app));
+        get(child(dbRef, `products`))
+          .then(snapshot => {
+            if (snapshot.exists()) {
+              products = snapshot.val();
+              setProductList(products);
+              console.log(products);
+            } else {
+              console.log('No data available');
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        setRefresh(false);
+      } else {
+        console.log('no user id found');
+        navigation.navigate('Login');
+      }
+    }
+    UserId();
+  }, [refresh]);
   function fnlFilter() {
     // this.setState({searchText: searchText});
     // console.log(e);
@@ -33,9 +80,16 @@ const Home = ({navigation}) => {
     console.log(item);
   }
   const width = Dimensions.get('window').width;
-  // const height = Dimensions.get('window').height;
+
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={refresh}
+          onRefresh={() => setRefresh(true)}
+        />
+      }
+    >
       <SafeAreaView style={{padding: 10}}>
         <View>
           <View
@@ -77,7 +131,7 @@ const Home = ({navigation}) => {
           </View>
           <Text style={styles.subHeading}>Category</Text>
           <FlatList
-            style={{height: 85}}
+            style={{height: 95}}
             horizontal={true}
             data={Data}
             renderItem={({item}) => (
@@ -117,12 +171,26 @@ const Home = ({navigation}) => {
           <FlatList
             style={{height: '100%', marginTop: 10}}
             numColumns={2}
-            data={Data}
+            data={Object.keys(productList)}
+            refreshing={true}
             renderItem={({item}) => (
               <TouchableOpacity style={styles.card}>
-                <Image style={styles.thumb} source={{uri: item.image}} />
+                <Image
+                  style={styles.thumb}
+                  source={{
+                    uri:
+                      'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
+                  }}
+                />
                 <View style={styles.infoContainer}>
-                  <Text style={styles.name}>{item.title}</Text>
+                  <Text style={styles.name}>{productList[item].name}</Text>
+                  <Text
+                    style={styles.description}
+                    ellipsizeMode="tail"
+                    numberOfLines={2}
+                  >
+                    {productList[item].description}
+                  </Text>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -130,7 +198,9 @@ const Home = ({navigation}) => {
                       paddingTop: 5,
                     }}
                   >
-                    <Text style={styles.price}>$ {item.price}</Text>
+                    <Text style={styles.price}>
+                      $ {productList[item].retailPrice}
+                    </Text>
                     <TouchableOpacity
                       style={{
                         backgroundColor: 'green',
@@ -158,6 +228,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'column',
     width: '46%',
+    height: 220,
     backgroundColor: 'white',
     borderRadius: 16,
     shadowOpacity: 0.2,
@@ -172,7 +243,7 @@ const styles = StyleSheet.create({
   thumb: {
     marginVertical: 12,
     objectFit: 'contain',
-    height: 120,
+    height: 100,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     width: '100%',
@@ -191,8 +262,14 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 13,
+    fontWeight: '600',
+    color: '#000',
+  },
+  description: {
+    fontSize: 13,
     fontWeight: '400',
     color: '#000',
+    width: 135,
   },
   horizontalName: {
     color: '#000',
