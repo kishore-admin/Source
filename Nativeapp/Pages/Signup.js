@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-const SignUp = () => {
+const SignUp = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -32,6 +32,7 @@ const SignUp = () => {
           // Alert.alert(data); // JSON data parsed by `data.json()` cal)l
           if (response.status == '200') {
             Alert.alert('Account created sucessfully');
+            navigation.navigate('Login');
           } else if (response.status == '400') {
             //   if (data.message === 'EMAIL_EXISTS')
             //     Alert.alert('Email Already exsists');
@@ -58,13 +59,13 @@ const SignUp = () => {
             }}
           ></Image>
         </View>
-        <Text>Username</Text>
+        {/* <Text>Username</Text>
         <TextInput
           value={username}
           placeholder="Username"
           style={styles.inputText}
           onChangeText={text => setUsername(text)}
-        ></TextInput>
+        ></TextInput> */}
         <Text>Enter your email</Text>
         <TextInput
           value={email}

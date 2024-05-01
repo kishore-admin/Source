@@ -188,20 +188,6 @@ const Getproduct = ({navigation}) => {
         <Text style={{fontSize: 20, alignSelf: 'center'}}>
           Fill the details below
         </Text>
-        {/* <View style={{paddingHorizontal: 20}}>
-          <TouchableOpacity
-            style={{
-              alignItems: 'center',
-              height: 40,
-              backgroundColor: 'gray',
-              justifyContent: 'center',
-              borderRadius: 3,
-            }}
-            onPress={test}
-          >
-            <Text style={{alignItems: 'center'}}>Add to Markpolo</Text>
-          </TouchableOpacity>
-        </View> */}
         <View style={styles.Getproduct}>
           <View style={{padding: 8}}>
             <Text>Company Name</Text>

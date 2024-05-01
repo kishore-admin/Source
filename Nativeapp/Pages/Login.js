@@ -9,9 +9,10 @@ import {
   Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ref, set, Database, getDatabase} from 'firebase/database';
+import {ref, set, getDatabase} from 'firebase/database';
 import {initializeApp} from 'firebase/app';
-const Login = () => {
+
+const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   //Firebase config
@@ -64,10 +65,6 @@ const Login = () => {
       .then(response => response.text())
       .then(async result => {
         console.log(result);
-        // console.log(JSON.parse(result).error.code);
-        // if (JSON.parse(result).error.code == 400) {
-        //   Alert.alert('invalid credentials');
-        // } else {
         let id = JSON.parse(result).localId;
         await AsyncStorage.setItem('userId', id);
         await AsyncStorage.setItem('email', email);
@@ -75,10 +72,11 @@ const Login = () => {
         set(ref(db, 'users/' + id), {
           email: email,
         });
-        // }
+        navigation.navigate('BottomStrip');
       })
       .catch(error => {
         console.log(error);
+        Alert.alert('Login failed');
       });
     // })
     // .catch(error => console.error(error));
@@ -150,7 +148,12 @@ const Login = () => {
         </TouchableOpacity> */}
         <View style={{flexDirection: 'row', marginVertical: 10}}>
           <Text>If you are new here,</Text>
-          <Text style={{color: 'blue'}}> Sign up</Text>
+          <Text
+            style={{color: 'blue'}}
+            onPress={() => navigation.navigate('SignUp')}
+          >
+            Sign up
+          </Text>
         </View>
       </View>
     </View>

@@ -9,6 +9,7 @@ import {
   Dimensions,
   ScrollView,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -65,17 +66,6 @@ const Home = ({navigation}) => {
     }
     UserId();
   }, [refresh]);
-  function fnlFilter() {
-    // this.setState({searchText: searchText});
-    // console.log(e);
-    // alert('hi');
-    // alert('1' + JSON.stringify(filterData));
-    let filteredData = Data.filter(function (item) {
-      return item.category.includes(filterData);
-    });
-    // alert(filteredData);
-    setData(filteredData);
-  }
   function fnlcart(item) {
     console.log(item);
   }
@@ -108,6 +98,12 @@ const Home = ({navigation}) => {
               }}
             ></Image>
             <Text>A free marketing app for manufactures</Text>
+            {/* <Icon
+              name="cart"
+              size={30}
+              color="green"
+              onPress={() => navigation.navigate('Cart')}
+            /> */}
           </View>
           <View
             style={{
@@ -118,16 +114,23 @@ const Home = ({navigation}) => {
           >
             <TextInput
               style={styles.inputText}
-              onChange={newText => setFilteredData(newText)}
+              value={filterData}
+              onFocus={() => navigation.navigate('ProductList')}
+              onChangeText={newText => setFilteredData(newText)}
               placeholder="Search"
             ></TextInput>
             <Icon
+              style={{position: 'absolute', left: '91%', top: 14}}
+              name="search"
+              size={20}
+              color="gray"
+            />
+            {/* <Icon
               name="cash-outline"
               size={30}
               color="green"
               // onPress={() => navigation.navigate('IntroSlider')}
-            />
-            <TouchableOpacity onPress={fnlFilter}></TouchableOpacity>
+            /> */}
           </View>
           <Text style={styles.subHeading}>Category</Text>
           <FlatList
@@ -282,13 +285,15 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   inputText: {
-    width: '85%',
+    width: '100%',
     borderStyle: 'solid',
     borderColor: 'gray',
     borderWidth: 1,
-    borderRadius: 25,
-    paddingHorizontal: 18,
-    paddingVertical: 8,
+    borderRadius: 5,
+    paddingLeft: 20,
+    paddingRight: 35,
+    paddingVertical: 5,
+    marginHorizontal: 5,
   },
   subHeading: {
     color: 'black',

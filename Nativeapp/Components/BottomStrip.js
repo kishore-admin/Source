@@ -6,46 +6,9 @@ import ReferEarn from '../Pages/MarketingDetails';
 import Profile from '../Pages/UserAccount';
 import Getproduct from '../Pages/GetProduct';
 import HelpCenter from '../Pages/HelpCenter';
+import Cart from '../Pages/Cart';
 const Tab = createBottomTabNavigator();
 const BottomStrip = () => {
-  // return (
-  //   <View
-  //     style={{
-  //       flex: 1,
-
-  //       backgroundColor: 'gray',
-  //       flexDirection: 'row',
-  //       alignItems: 'center',
-  //     }}
-  //   >
-  //     <View
-  //       style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}
-  //     >
-  //       <TouchableOpacity
-  //         style={{alignItems: 'center'}}
-  //         onPress={() => navigation.navigate('Home')}
-  //       >
-  //         <Icon name="home" size={25} color="#ffffff" />
-  //         <Text>Home</Text>
-  //       </TouchableOpacity>
-  //       <TouchableOpacity
-  //         style={{alignItems: 'center'}}
-  //         onPress={() => navigation.navigate('Product')}
-  //       >
-  //         <Icon name="logo-dropbox" size={25} color="#ffffff" />
-  //         <Text>Manufacture</Text>
-  //       </TouchableOpacity>
-  //       <TouchableOpacity style={{alignItems: 'center'}}>
-  //         <Icon name="person-circle" size={25} color="#ffffff" />
-  //         <Text>Account</Text>
-  //       </TouchableOpacity>
-  //       <TouchableOpacity style={{alignItems: 'center'}}>
-  //         <Icon name="cart" size={25} color="#ffffff" />
-  //         <Text>Cart</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  //   </View>
-  // );
   return (
     <Tab.Navigator
       screenOptions={{
@@ -114,7 +77,7 @@ const BottomStrip = () => {
         }}
       />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name="HelpCenter"
         component={HelpCenter}
         options={{
@@ -133,7 +96,7 @@ const BottomStrip = () => {
             </View>
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Profile"
         component={Profile}
@@ -155,6 +118,26 @@ const BottomStrip = () => {
         }}
       />
       {/* home , add product, account, support, marketdetaisl */}
+      <Tab.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <View
+              style={{
+                top: 3,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Icon name="cart" size={20} color="#000" />
+              <Text style={{color: focused ? '#000' : '#000', fontSize: 12}}>
+                Cart
+              </Text>
+            </View>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

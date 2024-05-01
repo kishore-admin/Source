@@ -28,9 +28,6 @@ const slides = [
 ];
 
 const IntroSlider = ({navigation}) => {
-  function onDone() {
-    onIntroDone();
-  }
   const renderItem = ({item}) => {
     return (
       <View
@@ -48,7 +45,6 @@ const IntroSlider = ({navigation}) => {
         <Text style={{fontSize: 20, fontWeight: 'bold', margin: 20}}>
           {item.title}
         </Text>
-        {/* <Text style={{fontSize: 17}}>{item.text}</Text> */}
       </View>
     );
   };
@@ -56,7 +52,7 @@ const IntroSlider = ({navigation}) => {
     <AppIntroSlider
       renderItem={renderItem}
       data={slides}
-      onDone={() => navigation.navigate('BottomStrip')}
+      onDone={() => navigation.navigate('Login')}
     />
   );
 };
