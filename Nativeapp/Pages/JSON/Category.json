@@ -1,0 +1,11 @@
+[
+    {"label": "Furniture", "value": "Furniture"},
+    {"label": "Fashion", "value": "Fashion"},
+    {"label": "Personal Care and Beauty", "value": "Personal Care and Beauty"},
+    {"label": "Automobile", "value": "Automobile"},
+    {"label": "Electronics", "value": "Electronics"},
+    {"label": "Books", "value": "Books"},
+    {"label": "Toys", "value": "Toys"},
+    {"label": "TV & Appliances", "value": "TV & Appliances"},
+    {"label": "Others", "value": "Others"}
+  ]

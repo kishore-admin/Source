@@ -15,7 +15,7 @@ import {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Product from './Product.json';
+import Product from './JSON/Product.json';
 import Carousel from 'react-native-reanimated-carousel';
 import {ref, set, getDatabase, get, child} from 'firebase/database';
 import {initializeApp} from 'firebase/app';
@@ -37,14 +37,13 @@ const Home = ({navigation}) => {
     appId: '1:58239290286:web:630328351dc0482cc2163f',
     measurementId: 'G-84P32S9TGG',
   };
-  let app;
-
+  let app = initializeApp(firebaseConfig);
+  const dbRef = ref(getDatabase(app));
+  const db = getDatabase(app);
   useEffect(() => {
     async function UserId() {
       let userId = await AsyncStorage.getItem('userId');
       if (userId !== undefined && userId !== null) {
-        app = initializeApp(firebaseConfig);
-        const dbRef = ref(getDatabase(app));
         get(child(dbRef, `products`))
           .then(snapshot => {
             if (snapshot.exists()) {
@@ -66,8 +65,25 @@ const Home = ({navigation}) => {
     }
     UserId();
   }, [refresh]);
-  function fnlcart(item) {
-    console.log(item);
+  async function fnlcart(item) {
+    const userid = await AsyncStorage.getItem('userId');
+    get(child(dbRef, `users/${userid}/cartItems`))
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          let array = snapshot.val();
+          let items = array.includes(item);
+          if (!items) {
+            array.push(item);
+            set(ref(db, 'users/' + userid + '/cartItems'), array);
+          }
+        } else {
+          console.log('No data available');
+          set(ref(db, 'users/' + userid + '/cartItems'), [item]);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
   const width = Dimensions.get('window').width;
 
@@ -115,7 +131,7 @@ const Home = ({navigation}) => {
             <TextInput
               style={styles.inputText}
               value={filterData}
-              onFocus={() => navigation.navigate('ProductList')}
+              onFocus={() => navigation.navigate('SearchProduct')}
               onChangeText={newText => setFilteredData(newText)}
               placeholder="Search"
             ></TextInput>
@@ -187,13 +203,6 @@ const Home = ({navigation}) => {
                 />
                 <View style={styles.infoContainer}>
                   <Text style={styles.name}>{productList[item].name}</Text>
-                  <Text
-                    style={styles.description}
-                    ellipsizeMode="tail"
-                    numberOfLines={2}
-                  >
-                    {productList[item].description}
-                  </Text>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -211,7 +220,7 @@ const Home = ({navigation}) => {
                         paddingVertical: 2,
                         paddingHorizontal: 15,
                       }}
-                      onPress={fnlcart}
+                      onPress={() => fnlcart(item)}
                     >
                       <Text style={{fontSize: 12, color: '#fff'}}>ADD</Text>
                     </TouchableOpacity>
@@ -231,7 +240,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'column',
     width: '46%',
-    height: 220,
+    height: 190,
     backgroundColor: 'white',
     borderRadius: 16,
     shadowOpacity: 0.2,
@@ -242,6 +251,7 @@ const styles = StyleSheet.create({
       width: 0,
     },
     elevation: 1,
+    paddingHorizontal: 5,
   },
   thumb: {
     marginVertical: 12,

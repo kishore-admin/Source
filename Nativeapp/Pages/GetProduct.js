@@ -15,6 +15,7 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import {ref, set, getDatabase, get, child} from 'firebase/database';
 import {initializeApp} from 'firebase/app';
 import uuid from 'react-native-uuid';
+import items from './JSON/Category.json';
 // import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const slides = [
@@ -132,11 +133,6 @@ const Getproduct = ({navigation}) => {
     setRetailReadiness('');
     setAlliedpdt('');
   }
-  let item = [
-    {label: 'Item1', value: 'Item1'},
-    {label: 'Item2', value: 'Item2'},
-    {label: 'Item3', value: 'Item3'},
-  ];
   const renderItem = ({item}) => {
     return (
       <View
@@ -213,7 +209,7 @@ const Getproduct = ({navigation}) => {
               labelField="label"
               valueField="value"
               search={true}
-              data={item}
+              data={items}
               placeholderStyle={{fontSize: 15, color: 'black'}}
               value={category}
               onChange={data => {
