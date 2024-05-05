@@ -19,6 +19,7 @@ import Product from './JSON/Product.json';
 import Carousel from 'react-native-reanimated-carousel';
 import {ref, set, getDatabase, get, child} from 'firebase/database';
 import {initializeApp} from 'firebase/app';
+import Category from './JSON/Category.json';
 
 const Home = ({navigation}) => {
   let products;
@@ -152,12 +153,12 @@ const Home = ({navigation}) => {
           <FlatList
             style={{height: 95}}
             horizontal={true}
-            data={Data}
+            data={Category}
             renderItem={({item}) => (
               <View
                 style={{
                   flex: 1,
-                  padding: 8,
+                  padding: 10,
                   height: 100,
                 }}
               >
@@ -165,7 +166,7 @@ const Home = ({navigation}) => {
                   style={styles.horizontalThumb}
                   source={{uri: item.image}}
                 />
-                <Text style={styles.horizontalName}>{item.category}</Text>
+                <Text style={styles.horizontalName}>{item.value}</Text>
               </View>
             )}
           />
@@ -288,7 +289,7 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 10,
     fontWeight: 'bold',
-    width: 40,
+    width: 60,
   },
   price: {
     fontSize: 14,

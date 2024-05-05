@@ -7,7 +7,6 @@ import {useEffect, useState} from 'react';
 const Cart = ({navigation}) => {
   const [cart, setCart] = useState([]);
   let products;
-  //   let cart = [];
   const json = {
     id: 1,
     title: 'Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops',
@@ -34,24 +33,32 @@ const Cart = ({navigation}) => {
   };
   let app = initializeApp(firebaseConfig);
   const dbRef = ref(getDatabase(app));
-  //   const db = getDatabase(app);
+  const db = getDatabase(app);
   useEffect(() => {
+    UserId();
     async function UserId() {
       let userid = await AsyncStorage.getItem('userId');
       if (userid !== undefined && userid !== null) {
         app = initializeApp(firebaseConfig);
         get(child(dbRef, `users/${userid}/cartItems`))
-          .then(snapshot => {
+          .then(async snapshot => {
             if (snapshot.exists()) {
               products = snapshot.val();
+              let array = [];
               for (let i = 0; i < products.length; i++) {
-                get(child(dbRef, `products/` + products[i])).then(snapshot => {
-                  //   console.log(snapshot.val());
-                  let data = snapshot.val();
-                  cart.push(data);
-                });
+                await get(child(dbRef, `products/` + products[i])).then(
+                  snapshot => {
+                    let data = snapshot.val();
+                    array.push(data);
+                  },
+                );
               }
-              console.log(cart);
+              console.log(array);
+              setCart(array);
+              for (let i = 0; i < array.length; i++) {
+                // cart.push(array[i]);
+                // cart = array;
+              }
             } else {
               console.log('No data available');
             }
@@ -59,25 +66,20 @@ const Cart = ({navigation}) => {
           .catch(error => {
             console.error(error);
           });
-        // setTimeout(() => {
-        //   console.log(cart);
-        // }, 3000);
       } else {
         console.log('no user id found');
         navigation.navigate('Login');
       }
     }
-    UserId();
-  });
+  }, []);
   return (
     <View style={{flex: 1, padding: 15}}>
       <Text style={{fontSize: 20}}>My Cart</Text>
       <View style={{flex: 1, marginTop: 50}}>
         <FlatList
           style={{flex: 1, height: '100%'}}
-          //   numColumns={1}
           data={cart}
-          refreshing={true}
+          //   refreshing={true}
           renderItem={({item}) => (
             <View
               style={{
@@ -88,6 +90,7 @@ const Cart = ({navigation}) => {
                 borderWidth: 1,
                 gap: 25,
                 marginBottom: 10,
+                // flex: 1,
               }}
             >
               <View style={{}}>
@@ -123,7 +126,7 @@ const Cart = ({navigation}) => {
                       //   padding: 5,
                     }}
                   >
-                    <Text style={{fontSize: 15, textAlign: 'center'}}>+</Text>
+                    <Text style={{fontSize: 15, textAlign: 'center'}}>-</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={{
@@ -132,7 +135,7 @@ const Cart = ({navigation}) => {
                       alignItems: 'center',
                     }}
                   >
-                    <Text style={{fontSize: 15, textAlign: 'center'}}>-</Text>
+                    <Text style={{fontSize: 15, textAlign: 'center'}}>+</Text>
                   </TouchableOpacity>
                 </View>
                 <View
@@ -151,6 +154,15 @@ const Cart = ({navigation}) => {
                     justifyContent: 'space-between',
                   }}
                 >
+                  <Text
+                    style={{
+                      verticalAlign: 'middle',
+                      color: 'green',
+                      fontWeight: '500',
+                    }}
+                  >
+                    Rs.{item.retailPrice}
+                  </Text>
                   <TouchableOpacity
                     style={{
                       marginVertical: 10,

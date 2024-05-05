@@ -2,6 +2,7 @@
     {"label": "Furniture", "value": "Furniture"},
     {"label": "Fashion", "value": "Fashion"},
     {"label": "Personal Care and Beauty", "value": "Personal Care and Beauty"},
+    {"label": "Beauty", "value": "Beauty"},
     {"label": "Automobile", "value": "Automobile"},
     {"label": "Electronics", "value": "Electronics"},
     {"label": "Books", "value": "Books"},
