@@ -1,7 +1,20 @@
-import {Text, TextInput, View, StyleSheet} from 'react-native';
+import {
+  Text,
+  TextInput,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import auth from '@react-native-firebase/auth';
 
 const UserAccount = () => {
+  function fnLogout() {
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'));
+  }
   return (
     <View style={{flex: 1, backgroundColor: '#dcdcde', padding: 20}}>
       <Icon
@@ -99,6 +112,9 @@ const UserAccount = () => {
           <Text style={{paddingHorizontal: 15}}>Country</Text>
           <TextInput placeholder="Country" style={{width: 200}}></TextInput>
         </View>
+        <TouchableOpacity onPress={fnLogout}>
+          <Text>Log out</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

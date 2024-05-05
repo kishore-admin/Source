@@ -56,38 +56,66 @@ const MktDetails = () => {
   async function fnlSubmit() {
     let uniqueId = uuid.v4();
     let code = makeid(6);
-    console.log(code);
-    let db = getDatabase(app);
-    set(ref(db, 'marketers/' + uniqueId), {
-      name: name,
-      contact: contact,
-      email: email,
-      address: address,
-      product: product,
-      referalCode: code,
-    });
     const userid = await AsyncStorage.getItem('userId');
-    const dbRef = ref(getDatabase(app));
-    get(child(dbRef, `users/${userid}/referals`))
-      .then(snapshot => {
-        if (snapshot.exists()) {
-          let array = snapshot.val();
-          array.push(uniqueId);
-          set(ref(db, 'users/' + userid + '/referals'), array);
-        } else {
-          console.log('No data available');
-          set(ref(db, 'users/' + userid + '/referals'), [uniqueId]);
+    //
+    let data = {email: email, password: 'welcome', returnSecureToken: true};
+    await fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDwX7JlIfWadfIqSNxzZsbSk3lXmld0BKI',
+      {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
+      },
+    )
+      .then(response => {
+        // let data = JSON.stringify(response);
+        // console.log(data);
+        if (response.status == '200') {
+          Alert.alert('Account created sucessfully');
+          let db = getDatabase(app);
+          set(ref(db, 'marketers/' + uniqueId), {
+            name: name,
+            contact: contact,
+            email: email,
+            address: address,
+            product: product,
+            referalCode: code,
+          });
+          const dbRef = ref(getDatabase(app));
+          get(child(dbRef, `users/${userid}/referals`))
+            .then(snapshot => {
+              if (snapshot.exists()) {
+                let array = snapshot.val();
+                array.push(uniqueId);
+                set(ref(db, 'users/' + userid + '/referals'), array);
+              } else {
+                console.log('No data available');
+                set(ref(db, 'users/' + userid + '/referals'), [uniqueId]);
+              }
+            })
+            .catch(error => {
+              console.error(error);
+            });
+          setName('');
+          setContact('');
+          setEmail('');
+          setAddress('');
+          setProduct('');
+          setCategory('');
+          // navigation.navigate('Login');
+        } else if (response.status == '400') {
+          //   if (data.message === 'EMAIL_EXISTS')
+          //     Alert.alert('Email Already exsists');
+          // } else {
+          Alert.alert('Account creation failed');
         }
       })
       .catch(error => {
-        console.error(error);
+        console.log(error);
       });
-    setName('');
-    setContact('');
-    setEmail('');
-    setAddress('');
-    setProduct('');
-    setCategory('');
+    //
   }
   function makeid(length) {
     let result = '';
