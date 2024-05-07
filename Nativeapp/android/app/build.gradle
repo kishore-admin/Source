@@ -78,6 +78,7 @@ android {
     namespace "com.nativeapp"
     defaultConfig {
         applicationId "com.nativeapp"
+        vectorDrawables.useSupportLibrary = true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

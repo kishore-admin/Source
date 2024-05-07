@@ -16,7 +16,7 @@ import {ref, set, getDatabase, get, child} from 'firebase/database';
 import {initializeApp} from 'firebase/app';
 import uuid from 'react-native-uuid';
 import items from './JSON/Category.json';
-// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const slides = [
   {
@@ -45,6 +45,7 @@ const slides = [
 ];
 
 const Getproduct = ({navigation}) => {
+  const [image, setImage] = useState('');
   const [company, setCompany] = useState('');
   const [contact, setContact] = useState('');
   const [category, setCategory] = useState('');
@@ -101,6 +102,7 @@ const Getproduct = ({navigation}) => {
       retailPrice: retailPrice,
       retailReadiness: retailReadiness,
       alliedPdt: alliedPdt,
+      image: image,
     });
     const userid = await AsyncStorage.getItem('userId');
     const dbRef = ref(getDatabase(app));
@@ -119,7 +121,6 @@ const Getproduct = ({navigation}) => {
       .catch(error => {
         console.error(error);
       });
-
     setCompany('');
     setContact('');
     setCategory('');
@@ -132,6 +133,7 @@ const Getproduct = ({navigation}) => {
     setRetailPrice('');
     setRetailReadiness('');
     setAlliedpdt('');
+    setImage('');
   }
   const renderItem = ({item}) => {
     return (
@@ -154,24 +156,17 @@ const Getproduct = ({navigation}) => {
       </View>
     );
   };
-  // function test() {
-  //   const options = {
-  //     mediaType: 'photo',
-  //     includeBase64: true,
-  //     maxHeight: 2000,
-  //     maxWidth: 2000,
-  //   };
-  //   launchImageLibrary(options, response => {
-  //     if (response.didCancel) {
-  //       console.log('User cancelled image picker');
-  //     } else if (response.error) {
-  //       console.log('Image picker error: ', response.error);
-  //     } else {
-  //       // let imageUri = response.uri || response.assets?.[0]?.uri;
-  //       // setSelectedImage(imageUri);
-  //     }
-  //   });
-  // }
+  function test() {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true,
+      includeBase64: true,
+    }).then(image => {
+      // console.log(image);
+      setImage(image.data);
+    });
+  }
   return showRealApp ? (
     <AppIntroSlider
       renderItem={renderItem}
@@ -184,6 +179,18 @@ const Getproduct = ({navigation}) => {
         <Text style={{fontSize: 20, alignSelf: 'center'}}>
           Fill the details below
         </Text>
+        <TouchableOpacity
+          style={{
+            alignItems: 'center',
+            height: 40,
+            backgroundColor: 'gray',
+            justifyContent: 'center',
+            borderRadius: 3,
+          }}
+          onPress={test}
+        >
+          <Text style={{alignItems: 'center'}}>image</Text>
+        </TouchableOpacity>
         <View style={styles.Getproduct}>
           <View style={{padding: 8}}>
             <Text>Company Name</Text>

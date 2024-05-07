@@ -164,7 +164,7 @@ const Home = ({navigation}) => {
               >
                 <Image
                   style={styles.horizontalThumb}
-                  source={{uri: item.image}}
+                  source={{uri: 'data:image/png;base64,' + item.image}}
                 />
                 <Text style={styles.horizontalName}>{item.value}</Text>
               </View>
@@ -198,8 +198,7 @@ const Home = ({navigation}) => {
                 <Image
                   style={styles.thumb}
                   source={{
-                    uri:
-                      'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
+                    uri: 'data:image/png;base64,' + productList[item].image,
                   }}
                 />
                 <View style={styles.infoContainer}>
@@ -252,7 +251,7 @@ const styles = StyleSheet.create({
       width: 0,
     },
     elevation: 1,
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
   },
   thumb: {
     marginVertical: 12,
