@@ -8,12 +8,18 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const UserAccount = () => {
+const UserAccount = ({navigation}) => {
   function fnLogout() {
     auth()
       .signOut()
-      .then(() => console.log('User signed out!'));
+      .then(async () => {
+        await AsyncStorage.removeItem('email');
+        await AsyncStorage.removeItem('password');
+        await AsyncStorage.removeItem('userId');
+        navigation.navigate('Login');
+      });
   }
   return (
     <View style={{flex: 1, backgroundColor: '#dcdcde', padding: 20}}>

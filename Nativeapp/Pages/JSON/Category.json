@@ -1,7 +1,7 @@
 [
     {"label": "Furniture", "value": "Furniture"},
     {"label": "Fashion", "value": "Fashion"},
-    {"label": "Personal Care and Beauty", "value": "Personal Care and Beauty"},
+    {"label": "Personal Care", "value": "Personal Care"},
     {"label": "Beauty", "value": "Beauty"},
     {"label": "Automobile", "value": "Automobile"},
     {"label": "Electronics", "value": "Electronics"},

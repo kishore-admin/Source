@@ -8,6 +8,13 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from 'firebase/auth';
+import {auth, database} from './Firebase/config';
+import {ref, set} from 'firebase/database';
+
 const SignUp = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -15,32 +22,27 @@ const SignUp = ({navigation}) => {
   const [cnpassword, setCnPassword] = useState('');
   async function fnSignUp() {
     if (password === cnpassword) {
-      let data = {email: email, password: password, returnSecureToken: true};
-      await fetch(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDwX7JlIfWadfIqSNxzZsbSk3lXmld0BKI',
-        {
-          method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data), // body data type must match "Content-Type" header
-        },
-      )
-        .then(response => {
-          let data = JSON.stringify(response);
-          console.log(data);
-          // Alert.alert(data); // JSON data parsed by `data.json()` cal)l
-          if (response.status == '200') {
-            Alert.alert('Account created sucessfully');
-            navigation.navigate('Login');
-          } else if (response.status == '400') {
-            //   if (data.message === 'EMAIL_EXISTS')
-            //     Alert.alert('Email Already exsists');
-            // } else {
-            Alert.alert('Account creation failed');
-          }
+      await createUserWithEmailAndPassword(auth, email, password)
+        .then(async userCred => {
+          const user = userCred.user;
+          set(ref(database, 'users/' + user.uid), {
+            email: email,
+          });
+          await sendEmailVerification(user);
+          Alert.alert('Verify your email address');
+          setEmail('');
+          setPassword('');
+          setCnPassword('');
+          navigation.navigate('Login');
         })
         .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            Alert.alert('Email address is already in use!');
+          }
+
+          if (error.code === 'auth/invalid-email') {
+            Alert.alert('That email address is invalid!');
+          }
           console.log(error);
         });
     } else {
@@ -59,13 +61,6 @@ const SignUp = ({navigation}) => {
             }}
           ></Image>
         </View>
-        {/* <Text>Username</Text>
-        <TextInput
-          value={username}
-          placeholder="Username"
-          style={styles.inputText}
-          onChangeText={text => setUsername(text)}
-        ></TextInput> */}
         <Text>Enter your email</Text>
         <TextInput
           value={email}

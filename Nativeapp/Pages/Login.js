@@ -9,110 +9,51 @@ import {
   Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ref, set, getDatabase} from 'firebase/database';
-import {initializeApp} from 'firebase/app';
+// import {initializeApp} from 'firebase/app';
+import auth from '@react-native-firebase/auth';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  //Firebase config
-  const firebaseConfig = {
-    apiKey: 'AIzaSyDwX7JlIfWadfIqSNxzZsbSk3lXmld0BKI',
-    authDomain: 'ecom-project-cef50.firebaseapp.com',
-    databaseURL:
-      'https://ecom-project-cef50-default-rtdb.asia-southeast1.firebasedatabase.app',
-    projectId: 'ecom-project-cef50',
-    storageBucket: 'ecom-project-cef50.appspot.com',
-    messagingSenderId: '58239290286',
-    appId: '1:58239290286:web:630328351dc0482cc2163f',
-    measurementId: 'G-84P32S9TGG',
-  };
-  let app;
+  const [user, setUser] = useState();
+
   useEffect(() => {
-    // Initialize Firebase
-    app = initializeApp(firebaseConfig);
-    async function login() {
-      let value = await AsyncStorage.getItem('email');
-      if (value !== undefined) {
-        let data = {email: email, password: password, returnSecureToken: true};
-        await fetch(
-          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDwX7JlIfWadfIqSNxzZsbSk3lXmld0BKI',
-          {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data), // body data type must match "Content-Type" header
-          },
-        );
-        // navigate to the
-      }
-    }
-    login;
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    console.log('subscriber');
+    console.log(subscriber);
+    return subscriber; // unsubscribe on unmount
   });
+  function onAuthStateChanged(user) {
+    console.log('user');
+    console.log(user);
+    setUser(user);
+  }
   async function fnLogin() {
-    let data = {email: email, password: password, returnSecureToken: true};
-    await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDwX7JlIfWadfIqSNxzZsbSk3lXmld0BKI',
-      {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data), // body data type must match "Content-Type" header
-      },
-    )
-      .then(response => response.text())
-      .then(async result => {
-        console.log(result);
-        let id = JSON.parse(result).localId;
-        await AsyncStorage.setItem('userId', id);
-        await AsyncStorage.setItem('email', email);
-        const db = getDatabase(app);
-        set(ref(db, 'users/' + id), {
-          email: email,
-        });
-        navigation.navigate('BottomStrip');
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(async response => {
+        console.log(response);
+        if (response.user.emailVerified) {
+          await AsyncStorage.setItem('userId', response.user.uid);
+          await AsyncStorage.setItem('email', response.user.email);
+          await AsyncStorage.setItem('password', password);
+          setEmail('');
+          setPassword('');
+          navigation.navigate('BottomStrip');
+        } else {
+          Alert.alert('Please verify your email address !!!');
+        }
       })
       .catch(error => {
-        console.log(error);
-        Alert.alert('Login failed');
+        if (error.code === 'auth/email-already-in-use') {
+          Alert.alert('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          Alert.alert('Invalid login credentials');
+        }
       });
-    // })
-    // .catch(error => console.error(error));
-    // .then(response => {
-    //   let data = JSON.stringify(response);
-    //   if (response.status == '200') {
-    //     Alert.alert('login success');
-    //   } else if (response.status == '400') {
-    //     Alert.alert('Check login details');
-    //   }
-    // });
   }
-  async function onGoogleButtonPress() {
-    // Check if your device supports Google Play
-    try {
-      // await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-      // Get the users ID token
-      // const {idToken} = await GoogleSignin.signIn();
-      // console.log('idToken' + idToken);
-      // const currentUser = await GoogleSignin.getCurrentUser();
-      // console.log('currentUser' + currentUser);
-      // Create a Google credential with the token
-      // const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      // console.log(googleCredential);
-      // Sign-in the user with the credential
-      // return auth().signInWithCredential(googleCredential);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  // Handle user state changes
-  // function onAuthStateChanged(user) {
-  //   setUser(user);
-  //   // if (initializing) setInitializing(false);
-  // }
-  // if (initializing) return null;
   return (
     <View style={{flex: 1}}>
       <View style={styles.container}>
