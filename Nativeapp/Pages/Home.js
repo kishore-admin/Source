@@ -157,9 +157,11 @@ const Home = ({navigation}) => {
             renderItem={({item}) => (
               <View
                 style={{
-                  flex: 1,
+                  // flex: 1,
                   padding: 10,
                   height: 100,
+                  // alignItems: 'center',
+                  // justifyContent: 'center',
                 }}
               >
                 <Image
@@ -268,6 +270,8 @@ const styles = StyleSheet.create({
   horizontalThumb: {
     objectFit: 'contain',
     height: 40,
+    width: 60,
+    alignItems: 'center',
   },
   infoContainer: {
     paddingHorizontal: 8,
@@ -289,6 +293,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 'bold',
     width: 60,
+    textAlign: 'center',
   },
   price: {
     fontSize: 14,
