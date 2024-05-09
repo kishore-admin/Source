@@ -179,18 +179,6 @@ const Getproduct = ({navigation}) => {
         <Text style={{fontSize: 20, alignSelf: 'center'}}>
           Fill the details below
         </Text>
-        <TouchableOpacity
-          style={{
-            alignItems: 'center',
-            height: 40,
-            backgroundColor: 'gray',
-            justifyContent: 'center',
-            borderRadius: 3,
-          }}
-          onPress={test}
-        >
-          <Text style={{alignItems: 'center'}}>image</Text>
-        </TouchableOpacity>
         <View style={styles.Getproduct}>
           <View style={{padding: 8}}>
             <Text>Company Name</Text>
@@ -303,6 +291,19 @@ const Getproduct = ({navigation}) => {
               onChangeText={value => setAlliedpdt(value)}
             ></TextInput>
           </View>
+          <TouchableOpacity
+            style={{
+              alignItems: 'center',
+              height: 40,
+              backgroundColor: 'gray',
+              justifyContent: 'center',
+              borderRadius: 3,
+              width: 80,
+            }}
+            onPress={test}
+          >
+            <Text style={{alignItems: 'center'}}>image</Text>
+          </TouchableOpacity>
         </View>
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity

@@ -157,18 +157,23 @@ const Home = ({navigation}) => {
             renderItem={({item}) => (
               <View
                 style={{
-                  // flex: 1,
                   padding: 10,
                   height: 100,
-                  // alignItems: 'center',
-                  // justifyContent: 'center',
                 }}
               >
-                <Image
-                  style={styles.horizontalThumb}
-                  source={{uri: 'data:image/png;base64,' + item.image}}
-                />
-                <Text style={styles.horizontalName}>{item.value}</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('ProductCategory', {
+                      category: item.value,
+                    });
+                  }}
+                >
+                  <Image
+                    style={styles.horizontalThumb}
+                    source={{uri: 'data:image/png;base64,' + item.image}}
+                  />
+                  <Text style={styles.horizontalName}>{item.value}</Text>
+                </TouchableOpacity>
               </View>
             )}
           />
