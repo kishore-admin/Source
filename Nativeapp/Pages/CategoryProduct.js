@@ -26,8 +26,7 @@ const ProductCategory = ({route, navigation}) => {
               let keys = Object.keys(products);
               for (let i = 0; i < keys.length; i++) {
                 if (products[keys[i]].category === category) {
-                  products[keys[i]].id = keys[i];
-                  //   console.log(products[keys[i]].id);
+                  products[keys[i]].id = keys[i]; // set product id in array for each product to add the product id to cart
                   list.push(products[keys[i]]);
                 }
               }
