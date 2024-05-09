@@ -196,7 +196,7 @@ const Home = ({navigation}) => {
             data={Object.keys(productList)}
             refreshing={true}
             renderItem={({item}) => (
-              <TouchableOpacity style={styles.card}>
+              <TouchableOpacity activeOpacity={1} style={styles.card}>
                 <Image
                   style={styles.thumb}
                   source={{
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'column',
     width: '46%',
-    height: 190,
+    height: 220,
     backgroundColor: 'white',
     borderRadius: 16,
     shadowOpacity: 0.2,
@@ -256,12 +256,12 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 5,
   },
   thumb: {
-    marginVertical: 12,
-    objectFit: 'contain',
-    height: 100,
+    // marginVertical: 12,
+    // objectFit: 'contain',
+    height: 140,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    width: '100%',
+    width: 155,
   },
   carouselImg: {
     objectFit: 'contain',
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     paddingHorizontal: 8,
-    paddingBottom: 15,
+    paddingVertical: 12,
   },
   name: {
     fontSize: 13,

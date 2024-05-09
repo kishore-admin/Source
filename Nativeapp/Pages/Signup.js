@@ -14,6 +14,7 @@ import {
 } from 'firebase/auth';
 import {auth, database} from './Firebase/config';
 import {ref, set} from 'firebase/database';
+import uuid from 'react-native-uuid';
 
 const SignUp = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -22,11 +23,14 @@ const SignUp = ({navigation}) => {
   const [cnpassword, setCnPassword] = useState('');
   async function fnSignUp() {
     if (password === cnpassword) {
+      let code = makeid(6);
       await createUserWithEmailAndPassword(auth, email, password)
         .then(async userCred => {
           const user = userCred.user;
+          console.log(code);
           set(ref(database, 'users/' + user.uid), {
             email: email,
+            referalCode: code,
           });
           await sendEmailVerification(user);
           Alert.alert('Verify your email address');
@@ -48,6 +52,18 @@ const SignUp = ({navigation}) => {
     } else {
       Alert.alert('Password Mismatch');
     }
+  }
+  function makeid(length) {
+    let result = '';
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
   }
   return (
     <View style={{flex: 1}}>

@@ -1,4 +1,12 @@
-import {View, Text, Image, TouchableOpacity, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ref, set, getDatabase, get, child} from 'firebase/database';
 import {initializeApp} from 'firebase/app';
@@ -6,6 +14,7 @@ import {useEffect, useState} from 'react';
 
 const Cart = ({navigation}) => {
   const [cart, setCart] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   let products;
   const json = {
     id: 1,
@@ -55,10 +64,6 @@ const Cart = ({navigation}) => {
               }
               console.log(array);
               setCart(array);
-              for (let i = 0; i < array.length; i++) {
-                // cart.push(array[i]);
-                // cart = array;
-              }
             } else {
               console.log('No data available');
             }
@@ -71,125 +76,135 @@ const Cart = ({navigation}) => {
         navigation.navigate('Login');
       }
     }
-  }, []);
+    setRefresh(false);
+  }, [refresh]);
   return (
     <View style={{flex: 1, padding: 15}}>
       <Text style={{fontSize: 20}}>My Cart</Text>
-      <View style={{flex: 1, marginTop: 50}}>
-        <FlatList
-          style={{flex: 1, height: '100%'}}
-          data={cart}
-          //   refreshing={true}
-          renderItem={({item}) => (
-            <View
-              style={{
-                padding: 10,
-                borderRadius: 4,
-                flexDirection: 'row',
-                borderStyle: 'solid',
-                borderWidth: 1,
-                gap: 25,
-                marginBottom: 10,
-                // flex: 1,
-              }}
-            >
-              <View style={{}}>
-                <Image
-                  style={{
-                    objectFit: 'contain',
-                    width: 100,
-                    height: 120,
-                  }}
-                  source={{
-                    uri:
-                      'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
-                  }}
-                ></Image>
-              </View>
-              <View style={{flex: 1}}>
-                <Text>{item.name}</Text>
-                <View
-                  style={{
-                    width: 62,
-                    flexDirection: 'row',
-                    marginTop: 5,
-                    borderStyle: 'solid',
-                    borderWidth: 1,
-                    borderRadius: 4,
-                  }}
-                >
-                  <TouchableOpacity
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refresh}
+            onRefresh={() => setRefresh(true)}
+          />
+        }
+      >
+        <View style={{flex: 1, marginTop: 50}}>
+          <FlatList
+            style={{flex: 1, height: '100%'}}
+            data={cart}
+            // refreshing={true}
+            renderItem={({item}) => (
+              <View
+                style={{
+                  padding: 10,
+                  borderRadius: 4,
+                  flexDirection: 'row',
+                  borderStyle: 'solid',
+                  borderWidth: 1,
+                  gap: 25,
+                  marginBottom: 10,
+                  // flex: 1,
+                }}
+              >
+                <View style={{}}>
+                  <Image
                     style={{
-                      width: 30,
-                      height: 20,
-                      alignItems: 'center',
-                      //   padding: 5,
+                      objectFit: 'contain',
+                      width: 100,
+                      height: 120,
                     }}
-                  >
-                    <Text style={{fontSize: 15, textAlign: 'center'}}>-</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{
-                      width: 30,
-                      height: 20,
-                      alignItems: 'center',
+                    source={{
+                      uri:
+                        'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
                     }}
-                  >
-                    <Text style={{fontSize: 15, textAlign: 'center'}}>+</Text>
-                  </TouchableOpacity>
+                  ></Image>
                 </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 5,
-                    marginTop: 5,
-                  }}
-                >
-                  <Text>Qty :</Text>
-                  <Text>1</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <Text
+                <View style={{flex: 1}}>
+                  <Text>{item.name}</Text>
+                  <View
                     style={{
-                      verticalAlign: 'middle',
-                      color: 'green',
-                      fontWeight: '500',
+                      width: 62,
+                      flexDirection: 'row',
+                      marginTop: 5,
+                      borderStyle: 'solid',
+                      borderWidth: 1,
+                      borderRadius: 4,
                     }}
                   >
-                    Rs.{item.retailPrice}
-                  </Text>
-                  <TouchableOpacity
+                    <TouchableOpacity
+                      style={{
+                        width: 30,
+                        height: 20,
+                        alignItems: 'center',
+                        //   padding: 5,
+                      }}
+                    >
+                      <Text style={{fontSize: 15, textAlign: 'center'}}>-</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        width: 30,
+                        height: 20,
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Text style={{fontSize: 15, textAlign: 'center'}}>+</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View
                     style={{
-                      marginVertical: 10,
-                      alignItems: 'center',
-                      height: 30,
-                      backgroundColor: 'gray',
-                      justifyContent: 'center',
-                      borderRadius: 3,
+                      flexDirection: 'row',
+                      gap: 5,
+                      marginTop: 5,
                     }}
-                    //   onPress={fnlSubmit}
+                  >
+                    <Text>Qty :</Text>
+                    <Text>1</Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}
                   >
                     <Text
                       style={{
-                        alignItems: 'center',
-                        fontSize: 12,
-                        paddingHorizontal: 10,
+                        verticalAlign: 'middle',
+                        color: 'green',
+                        fontWeight: '500',
                       }}
                     >
-                      Buy now
+                      Rs.{item.retailPrice}
                     </Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        marginVertical: 10,
+                        alignItems: 'center',
+                        height: 30,
+                        backgroundColor: 'gray',
+                        justifyContent: 'center',
+                        borderRadius: 3,
+                      }}
+                      //   onPress={fnlSubmit}
+                    >
+                      <Text
+                        style={{
+                          alignItems: 'center',
+                          fontSize: 12,
+                          paddingHorizontal: 10,
+                        }}
+                      >
+                        Buy now
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
-          )}
-        />
-      </View>
+            )}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
