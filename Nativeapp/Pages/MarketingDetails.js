@@ -18,6 +18,11 @@ import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Dropdown} from 'react-native-element-dropdown';
 import items from './JSON/Category.json';
+import {auth, database} from './Firebase/config';
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from 'firebase/auth';
 
 const MktDetails = () => {
   const [name, setName] = useState('');
@@ -42,7 +47,7 @@ const MktDetails = () => {
     async function UserId() {
       let userId = await AsyncStorage.getItem('userId');
       if (userId !== undefined && userId !== null) {
-        app = initializeApp(firebaseConfig);
+        // app = initializeApp(firebaseConfig);
       } else {
         console.log('no user id found');
         navigation.navigate('Login');
@@ -57,65 +62,107 @@ const MktDetails = () => {
     let uniqueId = uuid.v4();
     let code = makeid(6);
     const userid = await AsyncStorage.getItem('userId');
-    //
-    let data = {email: email, password: 'welcome', returnSecureToken: true};
-    await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDwX7JlIfWadfIqSNxzZsbSk3lXmld0BKI',
-      {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data), // body data type must match "Content-Type" header
-      },
-    )
-      .then(response => {
-        // let data = JSON.stringify(response);
-        // console.log(data);
-        if (response.status == '200') {
-          Alert.alert('Account created sucessfully');
-          let db = getDatabase(app);
-          set(ref(db, 'marketers/' + uniqueId), {
-            name: name,
-            contact: contact,
-            email: email,
-            address: address,
-            product: product,
-            referalCode: code,
+    let user;
+    await createUserWithEmailAndPassword(auth, email, 'welcome')
+      .then(async userCred => {
+        user = userCred.user;
+        set(ref(database, 'marketers/' + user.uid), {
+          name: name,
+          contact: contact,
+          email: email,
+          address: address,
+          product: product,
+          referalCode: code,
+        });
+        await sendEmailVerification(user);
+        get(child(ref(database), `users/${userid}/referals`))
+          .then(snapshot => {
+            if (snapshot.exists()) {
+              let array = snapshot.val();
+              array.push(user.uid);
+              set(ref(database, 'users/' + userid + '/referals'), array);
+            } else {
+              console.log('No data available');
+              set(ref(database, 'users/' + userid + '/referals'), [user.uid]);
+            }
+          })
+          .catch(error => {
+            console.error(error);
           });
-          const dbRef = ref(getDatabase(app));
-          get(child(dbRef, `users/${userid}/referals`))
-            .then(snapshot => {
-              if (snapshot.exists()) {
-                let array = snapshot.val();
-                array.push(uniqueId);
-                set(ref(db, 'users/' + userid + '/referals'), array);
-              } else {
-                console.log('No data available');
-                set(ref(db, 'users/' + userid + '/referals'), [uniqueId]);
-              }
-            })
-            .catch(error => {
-              console.error(error);
-            });
-          setName('');
-          setContact('');
-          setEmail('');
-          setAddress('');
-          setProduct('');
-          setCategory('');
-          // navigation.navigate('Login');
-        } else if (response.status == '400') {
-          //   if (data.message === 'EMAIL_EXISTS')
-          //     Alert.alert('Email Already exsists');
-          // } else {
-          Alert.alert('Account creation failed');
-        }
+        Alert.alert('Verification sent to email address');
+        setName('');
+        setContact('');
+        setEmail('');
+        setAddress('');
+        setProduct('');
+        setCategory('');
       })
       .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          Alert.alert('Email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          Alert.alert('That email address is invalid!');
+        }
         console.log(error);
       });
-    //
+    // let data = {email: email, password: 'welcome', returnSecureToken: true};
+    // await fetch(
+    //   'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDwX7JlIfWadfIqSNxzZsbSk3lXmld0BKI',
+    //   {
+    //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(data), // body data type must match "Content-Type" header
+    //   },
+    // )
+    //   .then(response => {
+    //     if (response.status == '200') {
+    //       console.log(response);
+    //       Alert.alert('Account created sucessfully');
+    //       let db = getDatabase(app);
+    //       set(ref(db, 'marketers/' + uniqueId), {
+    //         name: name,
+    //         contact: contact,
+    //         email: email,
+    //         address: address,
+    //         product: product,
+    //         referalCode: code,
+    //       });
+    //       const dbRef = ref(getDatabase(app));
+    //       get(child(dbRef, `users/${userid}/referals`))
+    //         .then(snapshot => {
+    //           if (snapshot.exists()) {
+    //             let array = snapshot.val();
+    //             array.push(uniqueId);
+    //             set(ref(db, 'users/' + userid + '/referals'), array);
+    //           } else {
+    //             console.log('No data available');
+    //             set(ref(db, 'users/' + userid + '/referals'), [uniqueId]);
+    //           }
+    //         })
+    //         .catch(error => {
+    //           console.error(error);
+    //         });
+    //       setName('');
+    //       setContact('');
+    //       setEmail('');
+    //       setAddress('');
+    //       setProduct('');
+    //       setCategory('');
+    //       // navigation.navigate('Login');
+    //     } else if (response.status == '400') {
+    //       //   if (data.message === 'EMAIL_EXISTS')
+    //       //     Alert.alert('Email Already exsists');
+    //       // } else {
+    //       Alert.alert('Account creation failed');
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
   }
   function makeid(length) {
     let result = '';

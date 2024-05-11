@@ -58,7 +58,9 @@ const Cart = ({navigation}) => {
                 await get(child(dbRef, `products/` + products[i])).then(
                   snapshot => {
                     let data = snapshot.val();
-                    array.push(data);
+                    if (data !== null) {
+                      array.push(data);
+                    }
                   },
                 );
               }
