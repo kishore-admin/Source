@@ -54,6 +54,18 @@ const Login = ({navigation}) => {
         }
       });
   }
+  async function fnForgetPassword() {
+    auth()
+      .sendPasswordResetEmail(email)
+      .then(function () {
+        // Email sent.
+        Alert.alert('Email sent');
+      })
+      .catch(function (error) {
+        // An error happened.
+        Alert.alert('Failed');
+      });
+  }
   return (
     <View style={{flex: 1}}>
       <View style={styles.container}>
@@ -88,7 +100,7 @@ const Login = ({navigation}) => {
           <Text style={{padding: 10, textAlign: 'center'}}>Google Sign in</Text>
         </TouchableOpacity> */}
         <View style={{flexDirection: 'row', marginVertical: 10}}>
-          <Text>If you are new here,</Text>
+          <Text>If you are new here, </Text>
           <Text
             style={{color: 'blue'}}
             onPress={() => navigation.navigate('SignUp')}
@@ -96,6 +108,9 @@ const Login = ({navigation}) => {
             Sign up
           </Text>
         </View>
+        <TouchableOpacity onPress={fnForgetPassword}>
+          <Text>Forget password</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

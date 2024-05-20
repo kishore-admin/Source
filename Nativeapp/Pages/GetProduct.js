@@ -17,6 +17,7 @@ import {initializeApp} from 'firebase/app';
 import uuid from 'react-native-uuid';
 import items from './JSON/Category.json';
 import ImagePicker from 'react-native-image-crop-picker';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const slides = [
   {
@@ -46,8 +47,8 @@ const slides = [
 
 const Getproduct = ({navigation}) => {
   const [image, setImage] = useState('');
-  const [company, setCompany] = useState('');
-  const [contact, setContact] = useState('');
+  // const [company, setCompany] = useState('');
+  // const [contact, setContact] = useState('');
   const [category, setCategory] = useState('');
   const [productName, setProductName] = useState('');
   const [description, setDescription] = useState('');
@@ -58,7 +59,8 @@ const Getproduct = ({navigation}) => {
   const [retailPrice, setRetailPrice] = useState('');
   const [retailReadiness, setRetailReadiness] = useState('');
   const [alliedPdt, setAlliedpdt] = useState('');
-  const [showRealApp, setShowRealApp] = useState(false);
+  const [showRealApp, setShowRealApp] = useState(true);
+  const [getGST, setGetGST] = useState(false);
 
   const firebaseConfig = {
     apiKey: 'AIzaSyDwX7JlIfWadfIqSNxzZsbSk3lXmld0BKI',
@@ -90,8 +92,8 @@ const Getproduct = ({navigation}) => {
     console.log(typeof company);
     console.log(company);
     set(ref(db, 'products/' + uniqueId), {
-      company: company,
-      contact: contact,
+      // company: company,
+      // contact: contact,
       category: category,
       name: productName,
       description: description,
@@ -121,8 +123,8 @@ const Getproduct = ({navigation}) => {
       .catch(error => {
         console.error(error);
       });
-    setCompany('');
-    setContact('');
+    // setCompany('');
+    // setContact('');
     setCategory('');
     setProductName('');
     setDescription('');
@@ -171,16 +173,48 @@ const Getproduct = ({navigation}) => {
     <AppIntroSlider
       renderItem={renderItem}
       data={slides}
-      onDone={() => setShowRealApp(false)}
+      onDone={() => {
+        setShowRealApp(false);
+        setGetGST(true);
+      }}
     />
+  ) : getGST ? (
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text>Enter your Gst number</Text>
+      <TextInput
+        // value={value}
+        placeholder="Enter your GST"
+        //   style={styles.inputText}
+        onChangeText={text => setValue(text)}
+      ></TextInput>
+      <TouchableOpacity
+        style={{
+          alignItems: 'center',
+          height: 30,
+          width: 60,
+          backgroundColor: 'gray',
+          justifyContent: 'center',
+          borderRadius: 3,
+        }}
+        onPress={() => setGetGST(false)}
+      >
+        <Text style={{alignItems: 'center'}}>Verify</Text>
+      </TouchableOpacity>
+    </View>
   ) : (
     <ScrollView>
       <View style={{flex: 1, justifyContent: 'center', marginVertical: 40}}>
+        <Icon
+          name="cash-outline"
+          size={30}
+          color="green"
+          onPress={() => navigation.navigate('MyProductlist')}
+        />
         <Text style={{fontSize: 20, alignSelf: 'center'}}>
-          Fill the details below
+          Enter your product details
         </Text>
         <View style={styles.Getproduct}>
-          <View style={{padding: 8}}>
+          {/* <View style={{padding: 8}}>
             <Text>Company Name</Text>
             <TextInput
               style={styles.inputbox}
@@ -196,22 +230,7 @@ const Getproduct = ({navigation}) => {
               value={contact}
               onChangeText={newText => setContact(newText)}
             ></TextInput>
-          </View>
-          <View style={{padding: 8}}>
-            <Text>Catagory</Text>
-            <Dropdown
-              style={styles.inputbox}
-              labelField="label"
-              valueField="value"
-              search={true}
-              data={items}
-              placeholderStyle={{fontSize: 15, color: 'black'}}
-              value={category}
-              onChange={data => {
-                setCategory(data.value);
-              }}
-            ></Dropdown>
-          </View>
+          </View> */}
           <View style={{padding: 8}}>
             <Text>Product Name</Text>
             <TextInput
@@ -228,6 +247,21 @@ const Getproduct = ({navigation}) => {
               multiline={true}
               onChangeText={newText => setDescription(newText)}
             ></TextInput>
+          </View>
+          <View style={{padding: 8}}>
+            <Text>Catagory</Text>
+            <Dropdown
+              style={styles.inputbox}
+              labelField="label"
+              valueField="value"
+              search={true}
+              data={items}
+              placeholderStyle={{fontSize: 15, color: 'black'}}
+              value={category}
+              onChange={data => {
+                setCategory(data.value);
+              }}
+            ></Dropdown>
           </View>
           <View style={{padding: 8}}>
             <Text>Wholesale Quantity</Text>

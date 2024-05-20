@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../Pages/Home';
 import ReferEarn from '../Pages/MarketingDetails';
-import Profile from '../Pages/UserAccount';
+import Profile from '../Pages/Account/UserAccount';
 import Getproduct from '../Pages/GetProduct';
 import HelpCenter from '../Pages/HelpCenter';
 import Cart from '../Pages/Cart';
@@ -36,7 +36,7 @@ const BottomStrip = () => {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Referal"
         component={ReferEarn}
         options={{
@@ -55,8 +55,8 @@ const BottomStrip = () => {
             </View>
           ),
         }}
-      />
-      <Tab.Screen
+      /> */}
+      {/* <Tab.Screen
         name="GetProduct"
         component={Getproduct}
         options={{
@@ -75,7 +75,7 @@ const BottomStrip = () => {
             </View>
           ),
         }}
-      />
+      /> */}
 
       {/* <Tab.Screen
         name="HelpCenter"

@@ -16,7 +16,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Product from './JSON/Product.json';
-import Carousel from 'react-native-reanimated-carousel';
+// import Carousel from 'react-native-reanimated-carousel';
 import {ref, set, getDatabase, get, child} from 'firebase/database';
 import {initializeApp} from 'firebase/app';
 import Category from './JSON/Category.json';
@@ -178,7 +178,7 @@ const Home = ({navigation}) => {
             )}
           />
           <Text style={styles.subHeading}>Special offers</Text>
-          <Carousel
+          {/* <Carousel
             style={{alignItems: 'center'}}
             loop
             pagingEnabled={false}
@@ -193,7 +193,7 @@ const Home = ({navigation}) => {
                 <Image style={styles.carouselImg} source={{uri: item.image}} />
               </View>
             )}
-          />
+          /> */}
           <Text style={styles.subHeading}>Products</Text>
           <FlatList
             style={{height: '100%', marginTop: 10}}
