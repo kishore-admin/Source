@@ -17,33 +17,6 @@ import {initializeApp} from 'firebase/app';
 import uuid from 'react-native-uuid';
 import items from './JSON/Category.json';
 import ImagePicker from 'react-native-image-crop-picker';
-import Icon from 'react-native-vector-icons/Ionicons';
-
-const slides = [
-  {
-    key: 1,
-    // title: 'Title 1',
-    title: 'Enter your products details to list in Markopolo',
-    image: require('./image/ecom-store.png'),
-    backgroundColor: '#2775f2',
-  },
-  {
-    key: 2,
-    // title: 'Title 2',
-    title:
-      'Markopolo assigns you a dedicated marketing person for your product',
-    image: require('./image/ecom-marketing.png'),
-    backgroundColor: '#febe29',
-  },
-  {
-    key: 3,
-    // title: 'Rocket guy',
-    title:
-      'Markopolo promotes your product and get bulk orders on free of cost',
-    image: require('./image/ecom-delivary.png'),
-    backgroundColor: '#22bcb5',
-  },
-];
 
 const Getproduct = ({navigation}) => {
   const [image, setImage] = useState('');
@@ -59,8 +32,6 @@ const Getproduct = ({navigation}) => {
   const [retailPrice, setRetailPrice] = useState('');
   const [retailReadiness, setRetailReadiness] = useState('');
   const [alliedPdt, setAlliedpdt] = useState('');
-  const [showRealApp, setShowRealApp] = useState(true);
-  const [getGST, setGetGST] = useState(false);
 
   const firebaseConfig = {
     apiKey: 'AIzaSyDwX7JlIfWadfIqSNxzZsbSk3lXmld0BKI',
@@ -137,28 +108,7 @@ const Getproduct = ({navigation}) => {
     setAlliedpdt('');
     setImage('');
   }
-  const renderItem = ({item}) => {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginVertical: 30,
-        }}
-      >
-        <Image
-          source={item.image}
-          style={{objectFit: 'contain', height: 320}}
-        />
-        <Text style={{fontSize: 20, fontWeight: 'bold', margin: 20}}>
-          {item.title}
-        </Text>
-        {/* <Text style={{fontSize: 17}}>{item.text}</Text> */}
-      </View>
-    );
-  };
-  function test() {
+  function fnlGetImage() {
     ImagePicker.openPicker({
       width: 300,
       height: 300,
@@ -169,68 +119,13 @@ const Getproduct = ({navigation}) => {
       setImage(image.data);
     });
   }
-  return showRealApp ? (
-    <AppIntroSlider
-      renderItem={renderItem}
-      data={slides}
-      onDone={() => {
-        setShowRealApp(false);
-        setGetGST(true);
-      }}
-    />
-  ) : getGST ? (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Enter your Gst number</Text>
-      <TextInput
-        // value={value}
-        placeholder="Enter your GST"
-        //   style={styles.inputText}
-        onChangeText={text => setValue(text)}
-      ></TextInput>
-      <TouchableOpacity
-        style={{
-          alignItems: 'center',
-          height: 30,
-          width: 60,
-          backgroundColor: 'gray',
-          justifyContent: 'center',
-          borderRadius: 3,
-        }}
-        onPress={() => setGetGST(false)}
-      >
-        <Text style={{alignItems: 'center'}}>Verify</Text>
-      </TouchableOpacity>
-    </View>
-  ) : (
+  return (
     <ScrollView>
       <View style={{flex: 1, justifyContent: 'center', marginVertical: 40}}>
-        <Icon
-          name="cash-outline"
-          size={30}
-          color="green"
-          onPress={() => navigation.navigate('MyProductlist')}
-        />
         <Text style={{fontSize: 20, alignSelf: 'center'}}>
           Enter your product details
         </Text>
         <View style={styles.Getproduct}>
-          {/* <View style={{padding: 8}}>
-            <Text>Company Name</Text>
-            <TextInput
-              style={styles.inputbox}
-              value={company}
-              onChangeText={newText => setCompany(newText)}
-            ></TextInput>
-          </View>
-          <View style={{padding: 8}}>
-            <Text>Contact</Text>
-            <TextInput
-              style={styles.inputbox}
-              inputMode="numeric"
-              value={contact}
-              onChangeText={newText => setContact(newText)}
-            ></TextInput>
-          </View> */}
           <View style={{padding: 8}}>
             <Text>Product Name</Text>
             <TextInput
@@ -242,7 +137,13 @@ const Getproduct = ({navigation}) => {
           <View style={{padding: 8}}>
             <Text>Product Description</Text>
             <TextInput
-              style={styles.inputbox}
+              style={{
+                borderStyle: 'solid',
+                borderWidth: 1,
+                borderRadius: 3,
+                // height: 35,
+                padding: 5,
+              }}
               value={description}
               multiline={true}
               onChangeText={newText => setDescription(newText)}
@@ -262,33 +163,6 @@ const Getproduct = ({navigation}) => {
                 setCategory(data.value);
               }}
             ></Dropdown>
-          </View>
-          <View style={{padding: 8}}>
-            <Text>Wholesale Quantity</Text>
-            <TextInput
-              style={styles.inputbox}
-              inputMode="numeric"
-              value={wholesaleQty}
-              onChangeText={newText => setWholesaleQty(newText)}
-            ></TextInput>
-          </View>
-          <View style={{padding: 8}}>
-            <Text>Wholesale Price</Text>
-            <TextInput
-              style={styles.inputbox}
-              inputMode="numeric"
-              value={wholesalePrice}
-              onChangeText={newText => setWholesalePrice(newText)}
-            ></TextInput>
-          </View>
-          <View style={{padding: 8}}>
-            <Text>Wholesale Readness time</Text>
-            <TextInput
-              style={styles.inputbox}
-              inputMode="numeric"
-              value={wholesaleReadiness}
-              onChangeText={newText => setWholesaleReadiness(newText)}
-            ></TextInput>
           </View>
           <View style={{padding: 8}}>
             <Text>Retail Quantity</Text>
@@ -318,6 +192,33 @@ const Getproduct = ({navigation}) => {
             ></TextInput>
           </View>
           <View style={{padding: 8}}>
+            <Text>Wholesale Quantity</Text>
+            <TextInput
+              style={styles.inputbox}
+              inputMode="numeric"
+              value={wholesaleQty}
+              onChangeText={newText => setWholesaleQty(newText)}
+            ></TextInput>
+          </View>
+          <View style={{padding: 8}}>
+            <Text>Wholesale Price</Text>
+            <TextInput
+              style={styles.inputbox}
+              inputMode="numeric"
+              value={wholesalePrice}
+              onChangeText={newText => setWholesalePrice(newText)}
+            ></TextInput>
+          </View>
+          <View style={{padding: 8}}>
+            <Text>Wholesale Readness time</Text>
+            <TextInput
+              style={styles.inputbox}
+              inputMode="numeric"
+              value={wholesaleReadiness}
+              onChangeText={newText => setWholesaleReadiness(newText)}
+            ></TextInput>
+          </View>
+          <View style={{padding: 8}}>
             <Text>Allied Product</Text>
             <TextInput
               style={styles.inputbox}
@@ -334,7 +235,7 @@ const Getproduct = ({navigation}) => {
               borderRadius: 3,
               width: 80,
             }}
-            onPress={test}
+            onPress={fnlGetImage}
           >
             <Text style={{alignItems: 'center'}}>image</Text>
           </TouchableOpacity>

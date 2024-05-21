@@ -11,10 +11,11 @@ import SignUp from './Signup';
 import Cart from './Cart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProductCategory from './CategoryProduct';
-import UserAccount from './Account/UserDetails';
-import Myprofile from './Account/UserAccount';
+import UserDetails from './Account/UserDetails';
+import UserAccount from './Account/UserAccount';
 import Getproduct from './GetProduct';
 import MyProductlist from './MyProductlist';
+import MktDetails from './MarketingDetails';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -47,10 +48,11 @@ const App = () => {
         <Stack.Screen name="ProductCategory" component={ProductCategory} />
         <Stack.Screen name="SearchProduct" component={SearchProduct} />
         <Stack.Screen name="Cart" component={Cart} />
+        <Stack.Screen name="UserDetails" component={UserDetails} />
         <Stack.Screen name="UserAccount" component={UserAccount} />
-        <Stack.Screen name="Myprofile" component={Myprofile} />
         <Stack.Screen name="Getproduct" component={Getproduct} />
         <Stack.Screen name="MyProductlist" component={MyProductlist} />
+        <Stack.Screen name="MktDetails" component={MktDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

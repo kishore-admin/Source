@@ -13,25 +13,24 @@ const UserAccount = ({navigation}) => {
     <View style={{flex: 1, flexDirection: 'column', margin: 20}}>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('UserAccount')}
+        onPress={() => navigation.navigate('UserDetails')}
       >
         <Text>Persoanl details</Text>
         <Icon name="arrow-forward" size={20} color="#000" />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Getproduct')}
+        onPress={() => navigation.navigate('MyProductlist')}
       >
         <Text>My Product</Text>
-        <Icon name="home" size={20} color="#000" />
+        <Icon name="arrow-forward" size={20} color="#000" />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('MktDetails')}
+      >
         <Text>Referals</Text>
-        <Icon name="home" size={20} color="#000" />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text>My Product</Text>
-        <Icon name="home" size={20} color="#000" />
+        <Icon name="arrow-forward" size={20} color="#000" />
       </TouchableOpacity>
     </View>
   );
