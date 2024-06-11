@@ -15,7 +15,7 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import {ref, set, getDatabase, get, child} from 'firebase/database';
 import {initializeApp} from 'firebase/app';
 import uuid from 'react-native-uuid';
-import items from './JSON/Category.json';
+import items from '../JSON/Category.json';
 import ImagePicker from 'react-native-image-crop-picker';
 
 const Getproduct = ({navigation}) => {

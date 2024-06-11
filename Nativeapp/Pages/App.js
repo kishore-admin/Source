@@ -5,17 +5,17 @@ import Splash from './Splash';
 import IntroSlider from './IntroSlider';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Login from './Login';
+import Login from './Authenication/Login';
 import SearchProduct from './SearchProduct';
-import SignUp from './Signup';
+import SignUp from './Authenication/Signup';
 import Cart from './Cart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProductCategory from './CategoryProduct';
 import UserDetails from './Account/UserDetails';
 import UserAccount from './Account/UserAccount';
-import Getproduct from './GetProduct';
-import MyProductlist from './MyProductlist';
-import MktDetails from './MarketingDetails';
+import Getproduct from './Account/GetProduct';
+import MyProductlist from './Account/MyProductlist';
+import MktDetails from './Account/MarketingDetails';
 const Stack = createNativeStackNavigator();
 
 const App = () => {

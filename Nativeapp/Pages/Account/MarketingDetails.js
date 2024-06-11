@@ -17,8 +17,8 @@ import {initializeApp} from 'firebase/app';
 import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Dropdown} from 'react-native-element-dropdown';
-import items from './JSON/Category.json';
-import {auth, database} from './Firebase/config';
+import items from '../JSON/Category.json';
+import {auth, database} from '../Firebase/config';
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,

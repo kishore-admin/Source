@@ -12,7 +12,7 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from 'firebase/auth';
-import {auth, database} from './Firebase/config';
+import {auth, database} from '../Firebase/config';
 import {ref, set} from 'firebase/database';
 import uuid from 'react-native-uuid';
 
